@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../src/sounds/game_over.mp3">
+   </FileRef>
+   <FileRef
+      location = "group:../src/sound/sound1.mp3">
+   </FileRef>
+   <FileRef
+      location = "group:../src/sound/sound2.mp3">
+   </FileRef>
+   <FileRef
+      location = "group:../src/sound/sound3.mp3">
+   </FileRef>
+   <FileRef
+      location = "group:../src/sound/sound4.mp3">
+   </FileRef>
+   <FileRef
+      location = "group:GeniusApp.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>
