@@ -25,15 +25,21 @@ const Genius = () => {
     const [timesPressed, setTimesPressed] = useState(0);
     const [colorPressed, setColorPressed] = useState('');
 
+    function addColorToRoundColors() {
+        const color = colors[getRandomInt()];
+        roundColors.push(color);
+    }
+
     // generate round colors sequence
     useEffect(() => {
+
+        console.log('Adicionando coress!!');
 
         setTimesPressed(0);
 
         setIsUserTurn(false);
 
-        const color = colors[getRandomInt()];
-        roundColors.push(color);
+        addColorToRoundColors();
 
     }, [round]);
 
@@ -46,6 +52,10 @@ const Genius = () => {
         if(isUserTurn || isGameOver) return;
 
         const gameTimerId = setInterval(() => {
+
+            if(roundColors[0] === undefined) {
+                addColorToRoundColors();
+            }
 
             if(i > roundColors.length) {
                 setIsUserTurn(true);
