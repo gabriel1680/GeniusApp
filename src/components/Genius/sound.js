@@ -11,10 +11,14 @@ const sounds = {
 export function playSoundByColor(color) {
     if(!color) return;
     const sound = sounds[color];
+    sound.setVolume(1);
+    sound.setSpeed(1.5);
     sound.play();
 }
 
 export function playGameOverSound() {
     const gameOverSound = sounds['gameOver'];
+    gameOverSound.setVolume(1);
+    gameOverSound.setSpeed(1.5);
     gameOverSound.play();
 }
