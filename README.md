@@ -14,9 +14,13 @@ O famoso jogo de memória, porém recriado com react native.
 
 ## Imagens
 
+- Icone
+
+<img width="150" height="300" alt="icon" src="https://user-images.githubusercontent.com/72470217/129493960-0f98884d-9a88-46f5-acca-0cf391fd531b.png">
+
 - Splash screen.
 
-<img width="150" height="300" alt="splash" src="https://user-images.githubusercontent.com/72470217/129456851-839744d5-366e-4b73-9a20-aff217b1aa89.png">
+<img width="150" height="300" alt="splash" src="https://user-images.githubusercontent.com/72470217/129493978-059ae1a9-9941-4267-a7ef-edebe7a5780e.png">
 
 - Tela de início.
 
