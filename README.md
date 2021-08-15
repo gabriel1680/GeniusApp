@@ -1,4 +1,4 @@
-# GeniusApp-React-Native
+# GeniusApp
 
 ## Descrição
 
