@@ -25,10 +25,6 @@ const Genius = () => {
     const [timesPressed, setTimesPressed] = useState(0);
     const [colorPressed, setColorPressed] = useState('');
 
-    function addColorToRoundColors() {
-        const color = colors[getRandomInt()];
-        roundColors.push(color);
-    }
 
     // generate round colors sequence
     useEffect(() => {
@@ -40,9 +36,12 @@ const Genius = () => {
         addColorToRoundColors();
 
     }, [round]);
+    function addColorToRoundColors() {
+        const color = colors[getRandomInt()];
+        roundColors.push(color);
+    }
 
     let currentColor = '';
-
     // start sequence colors
     useEffect(() => {
         let i = 0;
@@ -51,11 +50,15 @@ const Genius = () => {
 
         const gameTimerId = setInterval(() => {
 
-            if(roundColors[0] === undefined) {
+            const isRoundColorsEmpty = roundColors[0] === undefined;
+
+            if(isRoundColorsEmpty) {
                 addColorToRoundColors();
             }
 
-            if(i > roundColors.length) {
+            const isIterationGreaterThanRound = i > roundColors.length;
+
+            if(isIterationGreaterThanRound) {
                 setIsUserTurn(true);
                 return;
             }
@@ -68,7 +71,7 @@ const Genius = () => {
             }
 
             currentColor = '';
-            setColorToBlink('');
+            setColorToBlink(currentColor);
         }, 800);
 
         return () => {
@@ -98,7 +101,10 @@ const Genius = () => {
 
     // increase the round
     useEffect(() => {
-        if(timesPressed === roundColors.length) {
+
+        const isFinalPress = timesPressed === roundColors.length;
+
+        if(isFinalPress) {
             setRound(round + 1);
             return;
         }
@@ -107,13 +113,19 @@ const Genius = () => {
     // game over
     useEffect(() => {
 
-        if(!isGameOver && !isUserTurn) return;
-
-        if(!isGameOver && isUserTurn) {
+        function resetState() {
             setRound(1);
             setIsUserTurn(false);
             setRoundColors([]);
             setColorPressed('');
+        }
+
+        if(!isGameOver && !isUserTurn) return;
+
+        const isRestart = !isGameOver && isUserTurn;
+
+        if(isRestart) {
+            resetState();
             return;
         }
 
@@ -126,7 +138,7 @@ const Genius = () => {
     const yellowOpacity = (colorToBlink === 'yellow' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
     const blueOpacity = (colorToBlink === 'blue' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
 
-    if(!isGameOver) playSoundByColor(colorToBlink);
+    playSoundByColor(colorToBlink);
 
     return (
         <View style={styles.container}>
