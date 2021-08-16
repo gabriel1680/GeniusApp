@@ -9,12 +9,6 @@ import { playGameOverSound, playSoundByColor } from "./sound";
 
 const colors = ['red', 'green', 'yellow', 'blue'];
 
-function getRandomInt() {
-    min = Math.ceil(0);
-    max = Math.floor(3);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 const Genius = () => {
 
     const [round, setRound] = useState(1);
@@ -36,10 +30,18 @@ const Genius = () => {
         addColorToRoundColors();
 
     }, [round]);
+
     function addColorToRoundColors() {
         const color = colors[getRandomInt()];
         roundColors.push(color);
     }
+
+    function getRandomInt() {
+        min = Math.ceil(0);
+        max = Math.floor(3);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
 
     let currentColor = '';
     // start sequence colors
@@ -133,12 +135,12 @@ const Genius = () => {
 
     }, [isGameOver]);
 
+    playSoundByColor(colorToBlink);
+
     const redOpacity = (colorToBlink === 'red' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
     const greenOpacity = (colorToBlink === 'green' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
     const yellowOpacity = (colorToBlink === 'yellow' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
     const blueOpacity = (colorToBlink === 'blue' || isUserTurn ? (isGameOver ? 0.3 : 1) : 0.5);
-
-    playSoundByColor(colorToBlink);
 
     return (
         <View style={styles.container}>
