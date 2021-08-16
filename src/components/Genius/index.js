@@ -33,8 +33,6 @@ const Genius = () => {
     // generate round colors sequence
     useEffect(() => {
 
-        console.log('Adicionando coress!!');
-
         setTimesPressed(0);
 
         setIsUserTurn(false);
