@@ -1,4 +1,4 @@
-import { Round } from "../src/components/Genius/GameEngine";
+import { Round } from '../src/engine/Round';
 
 /**
  * Fixture shorthand para criação de um round já configurado

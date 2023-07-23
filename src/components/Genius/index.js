@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import React, { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
-import styles from './styles';
-import Title from '../Title';
 import Score from "../Score";
+import Title from '../Title';
+import styles from './styles';
 
-import { GameEngine } from './GameEngine';
+import { GameEngine } from '../../engine/GameEngine';
 
 import { playGameOverSound, playSoundByColor } from "./sound";
 

@@ -1,4 +1,6 @@
-import { GameEngine, Round } from '../src/components/Genius/GameEngine';
+import { GameEngine } from '../src/engine/GameEngine';
+import { Round } from '../src/engine/Round';
+
 import { createConfiguredRoundWith } from './game.fixture';
 
 it('should be able to create a new GameRound', () => {
