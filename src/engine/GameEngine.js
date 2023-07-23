@@ -54,4 +54,8 @@ export class GameEngine {
         this.round = new Round();
         this.player.clearSelectedColors();
     }
+
+    getRoundLastColor() {
+        return this.round.colors.at(-1);
+    }
 }
