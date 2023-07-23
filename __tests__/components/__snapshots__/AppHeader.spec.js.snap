@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "justifyContent": "center",
+      "position": "absolute",
+      "top": 10,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#000",
+        "fontSize": 40,
+        "fontWeight": "bold",
+        "marginTop": 15,
+        "textAlign": "center",
+      }
+    }
+  >
+    GeniusApp
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "#000",
+        "fontSize": 20,
+        "fontWeight": "bold",
+        "marginTop": 15,
+        "textAlign": "center",
+      }
+    }
+  >
+    Teste Sua Memória!
+  </Text>
+</View>
+`;

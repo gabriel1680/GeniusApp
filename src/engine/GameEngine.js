@@ -9,11 +9,20 @@ export class GameEngine {
         this.isGameOver = false;
         this.events = {
             gameOver: [],
+            roundMove: [],
         };
     }
 
     onGameOver(observer) {
-        this.events.gameOver.push(observer);
+        this.addEventHandler('gameOver', observer);
+    }
+
+    onRoundMove(observer) {
+        this.addEventHandler('roundMove', observer);
+    }
+
+    addEventHandler(event, handlerFn) {
+        this.events[event].push(handlerFn)
     }
 
     playerPressColor(color) {
