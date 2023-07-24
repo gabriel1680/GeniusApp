@@ -10,10 +10,12 @@ export class Round {
     this.generateRoundColors();
   }
 
+  /** @private */
   generateRoundColors() {
     this.colors.push(this.getRandomColor());
   }
 
+  /** @private */
   getRandomColor() {
     const min = 0;
     const max = this.COLORS.length - 1;
@@ -23,6 +25,10 @@ export class Round {
 
   createNextRound() {
     return new Round(this);
+  }
+
+  getLastColor() {
+    return this.colors.at(-1);
   }
 
   /**

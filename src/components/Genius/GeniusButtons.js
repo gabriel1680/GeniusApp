@@ -7,32 +7,32 @@ import styles from './styles';
  * @param {{ game: import('../../engine/GameEngine').GameEngine, disabled: boolean, coloToBlink: string }} param0
  * @returns {JSX.Element}
  */
-function GeniusButtons({ game, disabled, coloToBlink }) {
+function GeniusButtons({ game }) {
   return (
     <>
       <View style={styles.topBottomButton}>
         <TouchableOpacity
           onPressOut={() => game.playerPressColor('red')}
-          disabled={disabled}>
+          disabled={game.isPlayerTurn}>
           <View
             style={[
               styles.geniusButton,
               styles.topLeftButton,
               styles.redButton,
-              { opacity: coloToBlink === 'red' ? 1 : 0.3 },
+              { opacity: game.currentColor === 'red' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPressOut={() => game.playerPressColor('green')}
-          disabled={disabled}>
+          disabled={game.isPlayerTurn}>
           <View
             style={[
               styles.geniusButton,
               styles.topRightButton,
               styles.greenButton,
-              { opacity: coloToBlink === 'green' ? 1 : 0.3 },
+              { opacity: game.currentColor === 'green' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
@@ -41,26 +41,26 @@ function GeniusButtons({ game, disabled, coloToBlink }) {
       <View style={styles.topBottomButton}>
         <TouchableOpacity
           onPressOut={() => game.playerPressColor('yellow')}
-          disabled={disabled}>
+          disabled={game.isPlayerTurn}>
           <View
             style={[
               styles.geniusButton,
               styles.bottomLeftButton,
               styles.yellowButton,
-              { opacity: coloToBlink === 'yellow' ? 1 : 0.3 },
+              { opacity: game.currentColor === 'yellow' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
 
         <TouchableOpacity
           onPressOut={() => game.playerPressColor('blue')}
-          disabled={disabled}>
+          disabled={game.isPlayerTurn}>
           <View
             style={[
               styles.geniusButton,
               styles.bottomRightButton,
               styles.blueButton,
-              { opacity: coloToBlink === 'blue' ? 1 : 0.3 },
+              { opacity: game.currentColor === 'blue' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>

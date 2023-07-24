@@ -1,5 +1,6 @@
-import { GameEngine } from '../src/engine/GameEngine';
-import { Round } from '../src/engine/Round';
+import { GameEngine } from '../../src/engine/GameEngine';
+import { Round } from '../../src/engine/Round';
+import { sleep } from '../../src/utils';
 
 import { createConfiguredRoundWith } from './game.fixture';
 
@@ -68,4 +69,12 @@ it('should be able to restart game', () => {
   game.restart();
   expect(game.round.colors).toHaveLength(1);
   expect(game.player.selectedColors).toHaveLength(0);
+});
+
+it('should be able to game over when player does not click on colors after timer', async () => {
+  const round = createConfiguredRoundWith(['blue']);
+  const game = new GameEngine(round);
+  game.start();
+  await sleep(4000);
+  expect(game.isGameOver).toBeTruthy();
 });

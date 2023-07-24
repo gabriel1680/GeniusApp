@@ -1,5 +1,6 @@
 import { Player } from "./Player";
 import { Round } from "./Round";
+import { sleep } from '../utils';
 
 export class GameEngine {
 
@@ -7,22 +8,32 @@ export class GameEngine {
         this.round = round;
         this.player = new Player();
         this.isGameOver = false;
+        this.isPlayerTurn = false;
+        this.currentColor = '';
         this.events = {
             gameOver: [],
-            roundMove: [],
         };
     }
 
+    async start() {
+        while (this.isGameOver !== true) {
+            await sleep();
+            for (const color of this.round.colors) {
+                this.currentColor = color;
+                await sleep();
+                this.currentColor = '';
+                await sleep();
+            }
+            this.isPlayerTurn = true;
+            await sleep(2000 * this.round.colors.length);
+            if (this.player.selectedColors.length < this.round.colors.length) {
+                this.isGameOver = true;
+            }
+        }
+    }
+
     onGameOver(observer) {
-        this.addEventHandler('gameOver', observer);
-    }
-
-    onRoundMove(observer) {
-        this.addEventHandler('roundMove', observer);
-    }
-
-    addEventHandler(event, handlerFn) {
-        this.events[event].push(handlerFn)
+        this.events.gameOver.push(observer);
     }
 
     playerPressColor(color) {
@@ -30,6 +41,7 @@ export class GameEngine {
         this.verifyPlayerPressedColors();
     }
 
+    /** @private */
     verifyPlayerPressedColors() {
         for (let i = 0; i < this.player.selectedColors.length; i++) {
             if (this.player.selectedColors[i] !== this.round.colors[i]) {
@@ -39,6 +51,7 @@ export class GameEngine {
         }
     }
 
+    /** @private */
     gameOver() {
         this.isGameOver = true;
         this.events.gameOver.forEach((observerFn) => {
@@ -53,9 +66,6 @@ export class GameEngine {
     restart() {
         this.round = new Round();
         this.player.clearSelectedColors();
-    }
-
-    getRoundLastColor() {
-        return this.round.colors.at(-1);
+        this.start();
     }
 }

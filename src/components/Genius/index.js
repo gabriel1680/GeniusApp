@@ -12,45 +12,18 @@ import GeniusButtons from "./GeniusButtons";
 
 const Genius = () => {
 
-    const [colorToBlink, setColorToBlink] = useState('');
-    const [isPlayerTurn, setIsPlayerTurn] = useState(false);
-
     const game = new GameEngine();
     game.onGameOver(() => playGameOverSound());
-    game.onRoundMove(() => setIsPlayerTurn(false));
+    game.start();
 
-
-    playSoundByColor(game.getRoundLastColor());
-
-    useEffect(() => {
-        blinkRoundColors();
-    }, [game.round.colors.length]);
-
-    async function blinkRoundColors() {
-        for (const color of game.round.colors) {
-            await sleep();
-            setColorToBlink(color);
-            await sleep();
-            setColorToBlink('');
-        }
-        setIsPlayerTurn(true);
-    }
-
-    function sleep(ms = 300) {
-        return new Promise(r => setTimeout(() => r(null), ms));
-    }
+    playSoundByColor(game.round.getLastColor());
 
     return (
         <View style={styles.container}>
-
-            <Title text={(game.isGameOver ? '' : (isPlayerTurn ? 'Sua Vez' : 'Observe'))} />
-
+            <Title text={(game.isGameOver ? '' : (game.isPlayerTurn ? 'Sua Vez' : 'Observe'))} />
             <View style={[styles.centerCircle, { opacity: (game.isGameOver ? 0.3 : 1) }]} />
-
-            <GeniusButtons game={game} disabled={!isPlayerTurn} colorToBlink={colorToBlink} />
-
+            <GeniusButtons game={game} />
             <Score currentRound={game.round.colors.length} />
-
             {game.isGameOver && (
                 <View style={styles.restartContainer}>
                     <Text style={styles.restartTitle}>Game Over )=</Text>

@@ -1,4 +1,4 @@
-import { Player } from "../src/engine/Player";
+import { Player } from "../../src/engine/Player";
 
 it('should be able to add colors to selected ones', () => {
   const player = new Player();
