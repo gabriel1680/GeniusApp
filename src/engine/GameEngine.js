@@ -12,6 +12,7 @@ export class GameEngine {
         this.currentColor = '';
         this.events = {
             gameOver: [],
+            currentColorChange: []
         };
     }
 
@@ -19,7 +20,7 @@ export class GameEngine {
         while (this.isGameOver !== true) {
             await sleep();
             for (const color of this.round.colors) {
-                this.currentColor = color;
+                this.changeCurrentColorTo(color);
                 await sleep();
                 this.currentColor = '';
                 await sleep();
@@ -37,8 +38,19 @@ export class GameEngine {
         }
     }
 
+    changeCurrentColorTo(color) {
+        this.currentColor = color;
+        this.events.currentColorChange.forEach((observerFn) => {
+            observerFn(color);
+        });
+    }
+
     onGameOver(observer) {
         this.events.gameOver.push(observer);
+    }
+
+    onCurrentColorChange(observer) {
+        this.events.currentColorChange.push(observer);
     }
 
     playerPressColor(color) {

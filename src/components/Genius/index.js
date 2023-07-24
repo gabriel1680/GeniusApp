@@ -13,10 +13,9 @@ import GeniusButtons from "./GeniusButtons";
 const Genius = () => {
 
     const game = new GameEngine();
-    game.onGameOver(() => playGameOverSound());
+    game.onGameOver(playGameOverSound);
+    game.onCurrentColorChange(playSoundByColor);
     game.start();
-
-    playSoundByColor(game.round.getLastColor());
 
     return (
         <View style={styles.container}>
