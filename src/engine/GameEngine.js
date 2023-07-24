@@ -25,10 +25,15 @@ export class GameEngine {
                 await sleep();
             }
             this.isPlayerTurn = true;
-            await sleep(2000 * this.round.colors.length);
+            // aguarda 2s por cor
+            const minTime = 2000;
+            const timePerItemInRound = 1000 * this.round.colors.length;
+            await sleep(timePerItemInRound < minTime ? minTime : timePerItemInRound);
             if (this.player.selectedColors.length < this.round.colors.length) {
                 this.isGameOver = true;
+                break;
             }
+            this.nextRound();
         }
     }
 
