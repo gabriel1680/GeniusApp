@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import Score from "../Score";
-import Title from '../Title';
-import styles from './styles';
+import Title from "../Title";
+import styles from "./styles";
 
-import { GameEngine } from '../../engine/GameEngine';
+import { GameEngine } from "../../engine/GameEngine";
 
-import { playGameOverSound, playSoundByColor } from "./sound";
 import GeniusButtons from "./GeniusButtons";
+import { playGameOverSound, playSoundByColor } from "./sound";
 
 const Genius = () => {
 
@@ -19,20 +19,25 @@ const Genius = () => {
 
     return (
         <View style={styles.container}>
-            <Title text={(game.isGameOver ? '' : (game.isPlayerTurn ? 'Sua Vez' : 'Observe'))} />
+            <Title text={getTitle()} />
             <View style={[styles.centerCircle, { opacity: (game.isGameOver ? 0.3 : 1) }]} />
             <GeniusButtons game={game} />
             <Score currentRound={game.round.colors.length} />
             {game.isGameOver && (
                 <View style={styles.restartContainer}>
                     <Text style={styles.restartTitle}>Game Over )=</Text>
-                    <TouchableOpacity onPress={() => game.restart()} style={styles.restartButton} >
+                    <TouchableOpacity onPress={game.restart} style={styles.restartButton} >
                         <Text style={styles.restartButtonText}>Recomeçar</Text>
                     </TouchableOpacity>
                 </View>
             )}
         </View >
     );
+
+    function getTitle() {
+        if (game.isGameOver) return "";
+        return game.isPlayerTurn ? "Sua Vez" : "Observe";
+    }
 };
 
 export default Genius;
