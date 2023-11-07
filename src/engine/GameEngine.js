@@ -19,22 +19,27 @@ export class GameEngine {
     async start() {
         while (this.isGameOver !== true) {
             await sleep();
-            for (const color of this.round.colors) {
-                this.changeCurrentColorTo(color);
-                await sleep();
-                this.currentColor = '';
-                await sleep();
-            }
+            await this.blinkColors();
             this.isPlayerTurn = true;
             // aguarda 2s por cor
             const minTime = 2000;
             const timePerItemInRound = 1000 * this.round.colors.length;
             await sleep(timePerItemInRound < minTime ? minTime : timePerItemInRound);
             if (this.player.selectedColors.length < this.round.colors.length) {
-                this.isGameOver = true;
+                this.gameOver();
                 break;
             }
             this.nextRound();
+        }
+    }
+
+    /** @private */
+    async blinkColors() {
+        for(const color of this.round.colors) {
+            this.changeCurrentColorTo(color);
+            await sleep();
+            this.currentColor = '';
+            await sleep();
         }
     }
 

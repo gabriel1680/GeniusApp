@@ -65,9 +65,12 @@ describe('GameEngine (unit)', () => {
   it('should be able to game over when player does not click on colors after timer', async () => {
     const round = createConfiguredRoundWith(['blue']);
     const game = new GameEngine(round);
+    const gameOverObserver = jest.fn();
+    game.onGameOver(gameOverObserver);
     game.start();
     await sleep(4000);
     expect(game.isGameOver).toBeTruthy();
+    expect(gameOverObserver).toHaveBeenCalled();
   });
 
 });
