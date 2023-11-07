@@ -2,9 +2,7 @@ export class Round {
 
   COLORS = ['red', 'green', 'blue', 'yellow'];
 
-  /**
-   * @param {Round} round
-   */
+  /** @param {Round} round */
   constructor(round = {}) {
     this.colors = round?.colors ?? [];
     this.generateRoundColors();
