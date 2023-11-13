@@ -34,27 +34,31 @@ describe('GameEngine (unit)', () => {
     expect(game.player.selectedColors).toHaveLength(0);
   });
 
-  it('should be able to notify observers subscribed on gameOver event', () => {
-    const gameOverObserver = jest.fn();
-    game.onGameOver(gameOverObserver);
-    game.playerPressColor('red');
-    expect(gameOverObserver).toHaveBeenCalled();
-  });
+  describe('on game over', () => {
 
-  it('should not be able to notify observers subscribed on gameOver event not occurred', () => {
-    const gameOverObserver = jest.fn();
-    game.onGameOver(gameOverObserver);
-    game.playerPressColor('green');
-    expect(gameOverObserver).not.toHaveBeenCalled();
-  });
+    let gameOverObserver;
 
-  it('should be able to game over when player does not click on colors after timer', async () => {
-    const gameOverObserver = jest.fn();
-    game.onGameOver(gameOverObserver);
-    game.start();
-    await sleep(4000);
-    expect(game.isGameOver).toBeTruthy();
-    expect(gameOverObserver).toHaveBeenCalled();
+    beforeEach(() => {
+      gameOverObserver = jest.fn();
+      game.onGameOver(gameOverObserver);
+    })
+      
+    it('should be able to notify observers subscribed', () => {
+      game.playerPressColor('red');
+      expect(gameOverObserver).toHaveBeenCalled();
+    });
+
+    it('should not be able to notify observers subscribed on gameOver event not occurred', () => {
+      game.playerPressColor('green');
+      expect(gameOverObserver).not.toHaveBeenCalled();
+    });
+
+    it('should be able to game over when player does not click on colors after timer', async () => {
+      game.start();
+      await sleep(4000);
+      expect(game.isGameOver).toBeTruthy();
+      expect(gameOverObserver).toHaveBeenCalled();
+    });
   });
 
 });
