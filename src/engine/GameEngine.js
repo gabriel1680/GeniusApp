@@ -17,20 +17,26 @@ export class GameEngine {
     }
 
     async start() {
-        while (this.isGameOver !== true) {
+        while (!this.isGameOver) {
             await sleep();
             await this.blinkColors();
-            this.isPlayerTurn = true;
-            // aguarda 2s por cor
-            const minTime = 2000;
-            const timePerItemInRound = 1000 * this.round.colors.length;
-            await sleep(timePerItemInRound < minTime ? minTime : timePerItemInRound);
-            if (!this.verifyPlayerPressedColors()) {
-                this.gameOver();
-                break;
-            }
-            this.nextRound();
+            this.setPlayerTurn();
+            await this.waitForPlayerSelect();
+            this.verifyPlayerPressedColors() ? this.nextRound() : this.gameOver();
         }
+    }
+
+    /** @private */
+    setPlayerTurn() {
+        this.isPlayerTurn = true;
+    }
+
+    /** @private */
+    async waitForPlayerSelect() {
+        const MIN_TIME_TO_WAIT = 2000;
+        const timePerItemInRound = 1000 * this.round.colors.length;
+        const waitTime = timePerItemInRound < MIN_TIME_TO_WAIT ? MIN_TIME_TO_WAIT : timePerItemInRound;
+        await sleep(waitTime);
     }
 
     /** @private */
@@ -70,11 +76,9 @@ export class GameEngine {
      * @returns {boolean}
      */
     verifyPlayerPressedColors() {
-        for (let i = 0; i < this.round.colors.length; i++) {
-            if (this.player.selectedColors[i] !== this.round.colors[i]) {
+        for (let i = 0; i < this.round.colors.length; i++)
+            if (this.player.selectedColors[i] !== this.round.colors[i])
                 return false;
-            }
-        }
         return true;
     }
 
