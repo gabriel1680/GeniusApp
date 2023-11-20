@@ -25,7 +25,7 @@ export class GameEngine {
             const minTime = 2000;
             const timePerItemInRound = 1000 * this.round.colors.length;
             await sleep(timePerItemInRound < minTime ? minTime : timePerItemInRound);
-            if (this.player.selectedColors.length < this.round.colors.length) {
+            if (!this.verifyPlayerPressedColors()) {
                 this.gameOver();
                 break;
             }
@@ -60,17 +60,22 @@ export class GameEngine {
 
     playerPressColor(color) {
         this.player.selectColor(color);
-        this.verifyPlayerPressedColors();
+        if (!this.verifyPlayerPressedColors()) {
+            this.gameOver();
+        }
     }
 
-    /** @private */
+    /**
+     * @private
+     * @returns {boolean}
+     */
     verifyPlayerPressedColors() {
-        for (let i = 0; i < this.player.selectedColors.length; i++) {
+        for (let i = 0; i < this.round.colors.length; i++) {
             if (this.player.selectedColors[i] !== this.round.colors[i]) {
-                this.gameOver();                
-                break;
+                return false;
             }
         }
+        return true;
     }
 
     /** @private */
