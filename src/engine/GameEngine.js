@@ -55,12 +55,12 @@ export class GameEngine {
 
     /** @returns {void} */
     onGameOver(observer) {
-        this.state.onGameOver(observer);
+        this.state.on('gameOver', observer);
     }
 
     /** @returns {void} */
     onCurrentColorChange(observer) {
-        this.state.onCurrentColorChange(observer);
+        this.state.on('currentColorChange', observer);
     }
 
     /**

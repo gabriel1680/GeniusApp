@@ -1,41 +1,30 @@
+import { Observable } from "./Observable";
 import { Player } from "./Player";
 import { Round } from "./Round";
 
-export class GameState {
+export class GameState extends Observable {
 
     constructor(round) {
+        super();
         this.round = round;
         this.player = new Player();
         this.isGameOver = false;
         this.isPlayerTurn = false;
         this.currentColor = '';
-        this.events = {
-            gameOver: [],
-            currentColorChange: []
-        };
-    }
-
-    onGameOver(observer) {
-        this.events.gameOver.push(observer);
-    }
-
-    onCurrentColorChange(observer) {
-        this.events.currentColorChange.push(observer);
     }
 
     changeCurrentColor(color) {
         this.currentColor = color;
+        this.notify('currentColorChange', color);
+    }
+    
+    gameOver() {
+        this.isGameOver = true;
+        this.notify('gameOver');
     }
 
     setPlayerTurn() {
         this.isPlayerTurn = true;
-    }
-
-    gameOver() {
-        this.isGameOver = true;
-        this.events.gameOver.forEach((observerFn) => {
-            observerFn();
-        });
     }
 
     nextRound() {
