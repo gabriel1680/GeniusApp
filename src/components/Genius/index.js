@@ -10,8 +10,7 @@ import { GameEngine } from "../../engine/GameEngine";
 import GeniusButtons from "./GeniusButtons";
 import { playGameOverSound, playSoundByColor } from "./sound";
 
-const Genius = () => {
-
+export default function Genius() {
     const game = new GameEngine();
     game.onGameOver(playGameOverSound);
     game.onCurrentColorChange(playSoundByColor);
@@ -20,10 +19,10 @@ const Genius = () => {
     return (
         <View style={styles.container}>
             <Title text={getTitle()} />
-            <View style={[styles.centerCircle, { opacity: (game.isGameOver ? 0.3 : 1) }]} />
+            <View style={[styles.centerCircle, { opacity: (game.state.isGameOver ? 0.3 : 1) }]} />
             <GeniusButtons game={game} />
-            <Score currentRound={game.round.colors.length} />
-            {game.isGameOver && (
+            <Score currentRound={game.state.roundColors.length} />
+            {game.state.isGameOver && (
                 <View style={styles.restartContainer}>
                     <Text style={styles.restartTitle}>Game Over )=</Text>
                     <TouchableOpacity onPress={game.restart} style={styles.restartButton} >
@@ -35,9 +34,7 @@ const Genius = () => {
     );
 
     function getTitle() {
-        if (game.isGameOver) return "";
-        return game.isPlayerTurn ? "Sua Vez" : "Observe";
+        if (game.state.isGameOver) return "";
+        return game.state.isPlayerTurn ? "Sua Vez" : "Observe";
     }
-};
-
-export default Genius;
+}
