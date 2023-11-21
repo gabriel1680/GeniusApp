@@ -8,36 +8,36 @@ export class GameEngine {
      * @private
      * @property {GameState}
      */
-    state;
+    _state;
 
     constructor(round = new Round()) {
-        this.state = new GameState(round);
+        this._state = new GameState(round);
     }
 
     async start() {
-        while (!this.state.isGameOver) {
+        while (!this._state.isGameOver) {
             await sleep();
             await this.blinkColors();
-            this.state.setPlayerTurn();
+            this._state.setPlayerTurn();
             await this.waitForPlayerSelect();
-            this.verifyPlayerPressedColors() ? this.nextRound() : this.state.gameOver();
+            this.verifyPlayerPressedColors() ? this.nextRound() : this._state.gameOver();
         }
     }
 
     /** @private */
     async waitForPlayerSelect() {
         const MIN_TIME_TO_WAIT = 2000;
-        const timePerItemInRound = 1000 * this.state.round.colors.length;
+        const timePerItemInRound = 1000 * this._state.round.colors.length;
         const waitTime = timePerItemInRound < MIN_TIME_TO_WAIT ? MIN_TIME_TO_WAIT : timePerItemInRound;
         await sleep(waitTime);
     }
 
     /** @private */
     async blinkColors() {
-        for(const color of this.state.round.colors) {
-            this.state.changeCurrentColor(color);
+        for(const color of this._state.round.colors) {
+            this._state.changeCurrentColor(color);
             await sleep();
-            this.state.changeCurrentColor('');
+            this._state.changeCurrentColor('');
             await sleep();
         }
     }
@@ -47,20 +47,20 @@ export class GameEngine {
      * @returns {boolean}
      */
     verifyPlayerPressedColors() {
-        for (let i = 0; i < this.state.round.colors.length; i++)
-            if (this.state.player.selectedColors[i] !== this.state.round.colors[i])
+        for (let i = 0; i < this._state.round.colors.length; i++)
+            if (this._state.player.selectedColors[i] !== this._state.round.colors[i])
                 return false;
         return true;
     }
 
     /** @returns {void} */
     onGameOver(observer) {
-        this.state.on('gameOver', observer);
+        this._state.on('gameOver', observer);
     }
 
     /** @returns {void} */
     onCurrentColorChange(observer) {
-        this.state.on('currentColorChange', observer);
+        this._state.on('currentColorChange', observer);
     }
 
     /**
@@ -68,25 +68,25 @@ export class GameEngine {
      * @returns {void}
      */
     playerPressColor(color) {
-        this.state.player.selectColor(color);
+        this._state.player.selectColor(color);
         if (!this.verifyPlayerPressedColors()) {
-            this.state.gameOver();
+            this._state.gameOver();
         }
     }
 
     /** @returns {void} */
     nextRound() {
-        this.state.nextRound();
+        this._state.nextRound();
     }
 
     /** @returns {void} */
     restart() {
-        this.state.restart();
+        this._state.restart();
         this.start();
     }
 
-    /** @returns {GameState} */
-    getState() {
-        return this.state.clone();
+    /** @returns {{ isGameOver: boolean, isPlayerTurn: boolean, roundColors: string[], playerSelectedColors: string[], currentColor: string }} */
+    get state() {
+        return this._state.toJSON();
     }
 }

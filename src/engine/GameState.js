@@ -4,6 +4,21 @@ import { Round } from "./Round";
 
 export class GameState extends Observable {
 
+    /** @property {Round} */
+    round;
+
+    /** @property {Player} */
+    player;
+
+    /** @property {boolean} */
+    isGameOver;
+
+    /** @property {boolean} */
+    isPlayerTurn;
+
+    /** @property {string} */
+    currentColor;
+
     constructor(round) {
         super();
         this.round = round;
@@ -36,9 +51,13 @@ export class GameState extends Observable {
         this.player.clearSelectedColors();
     }
 
-    clone() {
-        const clone = Object.assign({}, this);
-        Object.setPrototypeOf(clone, GameState.prototype); 
-        return clone;
+    toJSON() {
+        return {
+            roundColors: this.round.colors,
+            playerSelectedColors: this.player.selectedColors,
+            isGameOver : this.isGameOver,
+            isPlayerTurn : this.isPlayerTurn,
+            currentColor : this.currentColor,
+        };
     }
 }

@@ -15,32 +15,30 @@ describe('GameEngine (unit)', () => {
 
   it('should be able to calculate when the color is incorrect when pressed in relation to the round colors', () => {
     game.playerPressColor('green');
-    expect(game.getState().isGameOver).toBeFalsy();
+    expect(game.state.isGameOver).toBeFalsy();
   });
 
   it('should be able to calculate when the color is correct when pressed in relation to the round colors', () => {
     game.playerPressColor('red');
-    expect(game.getState().isGameOver).toBeTruthy();
+    expect(game.state.isGameOver).toBeTruthy();
   });
 
   it('should be able to go to next round', () => {
     game.nextRound();
-    const state = game.getState();
-    expect(state.round.colors).toHaveLength(2);
+    expect(game.state.roundColors).toHaveLength(2);
   });
 
   it('should be able to restart game', () => {
     game.restart();
-    const state = game.getState();
-    expect(state.round.colors).toHaveLength(1);
-    expect(state.player.selectedColors).toHaveLength(0);
+    expect(game.state.roundColors).toHaveLength(1);
+    expect(game.state.playerSelectedColors).toHaveLength(0);
   });
 
   it('should be able to get the immutable game state clone', () => {
-    const state = game.getState();
-    state.gameOver();
+    const state = game.state;
+    state.isGameOver = true;
     expect(state.isGameOver).toBeTruthy();
-    expect(game.getState().isGameOver).toBeFalsy();
+    expect(game.state.isGameOver).toBeFalsy();
   });
 
   describe('on game over', () => {
@@ -65,7 +63,7 @@ describe('GameEngine (unit)', () => {
     it('should be able to game over when player does not click on colors after timer', async () => {
       game.start();
       await sleep(4000);
-      expect(game.getState().isGameOver).toBeTruthy();
+      expect(game.state.isGameOver).toBeTruthy();
       expect(gameOverObserver).toHaveBeenCalled();
     });
   });
