@@ -7,7 +7,7 @@ const Score = ({ currentRound }) => {
 
     const [lastRound, setLastRound] = useState(0);
 
-    if(currentRound - 1 > lastRound)
+    if (currentRound - 1 > lastRound)
         setLastRound(currentRound - 1);
 
     return (
