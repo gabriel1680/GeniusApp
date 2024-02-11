@@ -19,6 +19,7 @@ export class GameState extends Observable {
     /** @property {string} */
     currentColor;
 
+    /** @param {Round} round */
     constructor(round) {
         super();
         this.round = round;
@@ -47,7 +48,7 @@ export class GameState extends Observable {
     }
 
     restart() {
-        this.round = new Round();
+        this.round = Round.new();
         this.player.clearSelectedColors();
     }
 

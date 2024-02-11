@@ -1,7 +1,6 @@
+import { Round } from '../../src/engine/Round'
 import { GameEngine } from '../../src/engine/GameEngine';
 import { sleep } from '../../src/utils';
-
-import { createConfiguredRoundWith } from './game.fixture';
 
 describe('GameEngine (unit)', () => {
 
@@ -9,7 +8,7 @@ describe('GameEngine (unit)', () => {
     let game;
 
     beforeEach(() => {
-        const round = createConfiguredRoundWith(['green']);
+        const round = new Round(['green']);
         game = new GameEngine(round);
     });
 
@@ -45,6 +44,7 @@ describe('GameEngine (unit)', () => {
         let gameOverObserver;
 
         beforeEach(() => {
+            jest.clearAllMocks();
             gameOverObserver = jest.fn();
             game.onGameOver(gameOverObserver);
         });
@@ -54,7 +54,7 @@ describe('GameEngine (unit)', () => {
             expect(gameOverObserver).toHaveBeenCalled();
         });
 
-        it('should not be able to notify observers subscribed on gameOver event not occurred', () => {
+        it('should not be able to notify observers subscribed on gameOver when event not occurred', () => {
             game.playerPressColor('green');
             expect(gameOverObserver).not.toHaveBeenCalled();
         });

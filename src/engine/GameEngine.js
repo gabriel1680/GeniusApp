@@ -10,7 +10,7 @@ export class GameEngine {
      */
     _state;
 
-    constructor(round = new Round()) {
+    constructor(round = Round.new()) {
         this._state = new GameState(round);
     }
 

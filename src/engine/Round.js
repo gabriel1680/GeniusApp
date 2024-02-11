@@ -2,10 +2,9 @@ export class Round {
 
     COLORS = ['red', 'green', 'blue', 'yellow'];
 
-    /** @param {Round} round */
-    constructor(round = {}) {
-        this.colors = round?.colors ?? [];
-        this.generateRoundColors();
+    /** @param {string[]} colors */
+    constructor(colors = []) {
+        this.colors = colors;
     }
 
     /** @private */
@@ -23,7 +22,9 @@ export class Round {
     }
 
     createNextRound() {
-        return new Round(this);
+        const newRound = Round.from(this);
+        newRound.generateRoundColors();
+        return newRound;
     }
 
     getLastColor() {
@@ -31,11 +32,19 @@ export class Round {
     }
 
     /**
-     * Para propósitos de teste
-     *
-     * @param {string[]} colors Cores do round
+     * @param {Round} aRound
+     * @returns {Round}
      */
-    setRoundColors(colors) {
-        this.colors = colors;
+    static from(aRound) {
+        return new Round(aRound.colors);
+    }
+
+    /**
+     * @returns {Round}
+     */
+    static new() {
+        const round = new Round([]);
+        round.generateRoundColors();
+        return round;
     }
 }
