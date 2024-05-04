@@ -17,7 +17,6 @@ export class GameEngine {
             await this.blinkColors();
             this._state.setPlayerTurn();
             await this.waitForPlayerSelect();
-            console.log('After wait for player', this._state.toJSON());
             this.verifyAllPlayerPressedColors()
                 ? this.nextRound()
                 : this._state.gameOver();
