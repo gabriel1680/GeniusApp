@@ -1,14 +1,13 @@
 export class Player {
 
-    constructor() {
-        this.selectedColors = [];
-    }
+    selectedColors: string[] = [];
 
-    selectColor(color) {
+    selectColor(color: string): void {
         this.selectedColors.push(color);
     }
 
-    clearSelectedColors() {
+    clearSelectedColors(): void {
         this.selectedColors = [];
     }
 }
+

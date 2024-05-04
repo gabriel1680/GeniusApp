@@ -4,23 +4,17 @@ import { Round } from "./Round";
 
 export class GameState extends Observable {
 
-    /** @property {Round} */
-    round;
+    round: Round;
 
-    /** @property {Player} */
-    player;
+    player: Player;
 
-    /** @property {boolean} */
-    isGameOver;
+    isGameOver: boolean;
 
-    /** @property {boolean} */
-    isPlayerTurn;
+    isPlayerTurn: Boolean;
 
-    /** @property {string} */
-    currentColor;
+    currentColor: string;
 
-    /** @param {Round} round */
-    constructor(round) {
+    constructor(round: Round) {
         super();
         this.round = round;
         this.player = new Player();
@@ -29,25 +23,25 @@ export class GameState extends Observable {
         this.currentColor = '';
     }
 
-    changeCurrentColor(color) {
+    changeCurrentColor(color: string): void {
         this.currentColor = color;
         this.notify('currentColorChange', color);
     }
-    
-    gameOver() {
+
+    gameOver(): void {
         this.isGameOver = true;
         this.notify('gameOver');
     }
 
-    setPlayerTurn() {
+    setPlayerTurn(): void {
         this.isPlayerTurn = true;
     }
 
-    nextRound() {
+    nextRound(): void {
         this.round = this.round.createNextRound();
     }
 
-    restart() {
+    restart(): void {
         this.round = Round.new();
         this.player.clearSelectedColors();
     }
@@ -56,9 +50,10 @@ export class GameState extends Observable {
         return {
             roundColors: this.round.colors,
             playerSelectedColors: this.player.selectedColors,
-            isGameOver : this.isGameOver,
-            isPlayerTurn : this.isPlayerTurn,
-            currentColor : this.currentColor,
+            isGameOver: this.isGameOver,
+            isPlayerTurn: this.isPlayerTurn,
+            currentColor: this.currentColor,
         };
     }
 }
+

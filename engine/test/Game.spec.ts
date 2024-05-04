@@ -1,15 +1,19 @@
-import { Round } from '../../src/engine/Round'
-import { GameEngine } from '../../src/engine/GameEngine';
-import { sleep } from '../../src/utils';
+import { Round } from '../src/Round'
+import { GameEngine } from '../src/GameEngine';
+import { sleep } from '../src/utils';
 
 describe('GameEngine (unit)', () => {
 
-    /** @type {GameEngine} */
-    let game;
+    let game: GameEngine;
 
     beforeEach(() => {
         const round = new Round(['green']);
         game = new GameEngine(round);
+    });
+
+    it('should be able to create a new game instance with a round', () => {
+        const game = new GameEngine();
+        expect(game.state.roundColors).toHaveLength(1);
     });
 
     it('should be able to calculate when the color is incorrect when pressed in relation to the round colors', () => {
@@ -40,8 +44,29 @@ describe('GameEngine (unit)', () => {
         expect(game.state.isGameOver).toBeFalsy();
     });
 
+    it('should be able to pass the round when player chose the right color', async () => {
+        const promise = game.start();
+        await sleep(500);
+        game.playerPressColor("green");
+        await sleep(500);
+        expect(game.state.roundColors).toHaveLength(2)
+        await promise;
+    });
+
+    it('should be able to await more as round length increases', async () => {
+        const promise = game.start();
+        await sleep(300);
+        game.playerPressColor("green");
+        await sleep(1000);
+        game.playerPressColor("green");
+        game.playerPressColor(game.state.roundColors.at(-1)!);
+        await sleep(1300);
+        expect(game.state.roundColors).toHaveLength(3)
+        await promise;
+    });
+
     describe('on game over', () => {
-        let gameOverObserver;
+        let gameOverObserver: VoidFunction;
 
         beforeEach(() => {
             jest.clearAllMocks();
@@ -60,10 +85,29 @@ describe('GameEngine (unit)', () => {
         });
 
         it('should be able to game over when player does not click on colors after timer', async () => {
-            game.start();
-            await sleep(4000);
+            const promise = game.start();
+            await sleep(2000);
             expect(game.state.isGameOver).toBeTruthy();
             expect(gameOverObserver).toHaveBeenCalled();
+            await promise;
+        });
+    });
+
+    describe('on color change', () => {
+        let colorChangeObserver: VoidFunction;
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+            colorChangeObserver = jest.fn();
+            game.onCurrentColorChange(colorChangeObserver);
+        });
+
+        it('should be able to game over when player does not click on colors after timer', async () => {
+            const promise = game.start();
+            await sleep(300);
+            expect(colorChangeObserver).toHaveBeenCalled();
+            await promise;
         });
     });
 });
+

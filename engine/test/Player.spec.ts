@@ -1,4 +1,4 @@
-import { Player } from '../../src/engine/Player';
+import { Player } from '../src/Player';
 
 describe('Player (unit)', () => {
 
@@ -18,3 +18,4 @@ describe('Player (unit)', () => {
         expect(player.selectedColors).toStrictEqual([]);
     });
 });
+
