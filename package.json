@@ -4,6 +4,9 @@
   "description": "A memory Genius game",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "test": "npm t -ws"
+  },
   "workspaces": [
     "engine",
     "mobile"
