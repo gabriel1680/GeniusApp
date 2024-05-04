@@ -1,14 +1,27 @@
 {
   "name": "geniusapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "A memory Genius game",
   "main": "index.js",
   "type": "module",
   "workspaces": [
-    "./engine",
-    "./mobile"
+    "engine",
+    "mobile"
   ],
-  "keywords": [],
-  "author": "",
+  "keywords": [
+      "genius", 
+      "app", 
+      "typescript", 
+      "game", 
+      "engine", 
+      "javascript", 
+      "react-native", 
+      "mobile", 
+      "monorepo", 
+      "test",
+      "jest",
+      "npm"
+  ],
+  "author": "Gabriel P. Lopes",
   "license": "ISC"
 }

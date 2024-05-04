@@ -5,7 +5,7 @@ import Score from "../Score";
 import Title from "../Title";
 import styles from "./styles";
 
-import { GameEngine } from "../../engine/GameEngine";
+import { GameEngine } from "@genius/engine";
 
 import GeniusButtons from "./GeniusButtons";
 import { playGameOverSound, playSoundByColor } from "./sound";
