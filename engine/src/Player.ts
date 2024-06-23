@@ -1,4 +1,5 @@
 export class Player {
+    constructor(private readonly player: string) {}
 
     selectedColors: string[] = [];
 
@@ -10,4 +11,3 @@ export class Player {
         this.selectedColors = [];
     }
 }
-

@@ -3,46 +3,56 @@ import { Player } from "./Player";
 import { Round } from "./Round";
 
 export class GameState extends Observable {
-
-    round: Round;
-
-    player: Player;
-
-    isGameOver: boolean;
-
-    isPlayerTurn: Boolean;
-
-    currentColor: string;
-
-    constructor(round: Round) {
+    constructor(
+        private _player: Player,
+        private _round: Round = Round.new(),
+        private _isGameOver: boolean = false,
+        private _isPlayerTurn: boolean = false,
+        private _currentColor: string = ""
+    ) {
         super();
-        this.round = round;
-        this.player = new Player();
-        this.isGameOver = false;
-        this.isPlayerTurn = false;
-        this.currentColor = '';
+    }
+
+    public get currentColor(): string {
+        return this._currentColor;
+    }
+    
+    public get isPlayerTurn(): boolean {
+        return this._isPlayerTurn;
+    }
+
+    public get player(): Player {
+        return this._player;
+    }
+
+    public get round(): Round {
+        return this._round;
+    }
+
+    public get isGameOver(): boolean {
+        return this._isGameOver;
     }
 
     changeCurrentColor(color: string): void {
-        this.currentColor = color;
-        this.notify('currentColorChange', color);
+        this._currentColor = color;
+        this.notify("currentColorChange", color);
     }
 
     gameOver(): void {
-        this.isGameOver = true;
-        this.notify('gameOver');
+        this._isGameOver = true;
+        this.notify("gameOver");
     }
 
     setPlayerTurn(): void {
-        this.isPlayerTurn = true;
+        this._isPlayerTurn = true;
     }
 
     nextRound(): void {
-        this.round = this.round.createNextRound();
+        this._round = this.round.createNextRound();
     }
 
     restart(): void {
-        this.round = Round.new();
+        this._round = Round.new();
         this.player.clearSelectedColors();
     }
 
@@ -56,4 +66,3 @@ export class GameState extends Observable {
         };
     }
 }
-

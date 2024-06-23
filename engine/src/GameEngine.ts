@@ -1,13 +1,13 @@
-import { Round } from "./Round";
-import { sleep } from './utils';
+import { sleep } from "./utils";
 import { GameState } from "./GameState";
+import { Player } from "./Player";
 
 export class GameEngine {
+    constructor(private readonly _state: GameState) {}
 
-    private readonly _state: GameState;
-
-    constructor(round = Round.new()) {
-        this._state = new GameState(round);
+    public static create(player: string) {
+        const initialState = new GameState(new Player(player));
+        return new GameEngine(initialState);
     }
 
     async start(): Promise<void> {
@@ -27,7 +27,7 @@ export class GameEngine {
         for (const color of this._state.round.colors) {
             this._state.changeCurrentColor(color);
             await sleep();
-            this._state.changeCurrentColor('');
+            this._state.changeCurrentColor("");
             await sleep();
         }
     }
@@ -39,24 +39,30 @@ export class GameEngine {
 
     private verifyAllPlayerPressedColors(): boolean {
         for (let i = 0; i < this._state.round.colors.length; i++)
-            if (this._state.player.selectedColors[i] !== this._state.round.colors[i])
+            if (
+                this._state.player.selectedColors[i] !==
+                this._state.round.colors[i]
+            )
                 return false;
         return true;
     }
 
     private verifyPlayerPressedColors(): boolean {
         for (let i = 0; i < this._state.player.selectedColors.length; i++)
-            if (this._state.player.selectedColors[i] !== this._state.round.colors[i])
+            if (
+                this._state.player.selectedColors[i] !==
+                this._state.round.colors[i]
+            )
                 return false;
         return true;
     }
 
     onGameOver(observer: VoidFunction): void {
-        this._state.on('gameOver', observer);
+        this._state.on("gameOver", observer);
     }
 
     onCurrentColorChange(observer: VoidFunction): void {
-        this._state.on('currentColorChange', observer);
+        this._state.on("currentColorChange", observer);
     }
 
     playerPressColor(color: string): void {
@@ -79,4 +85,3 @@ export class GameEngine {
         return this._state.toJSON();
     }
 }
-

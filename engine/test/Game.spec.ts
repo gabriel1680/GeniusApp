@@ -1,6 +1,7 @@
 import { Round } from '../src/Round'
 import { GameEngine } from '../src/GameEngine';
 import { sleep } from '../src/utils';
+import { GameState, Player } from '../src';
 
 describe('GameEngine (unit)', () => {
 
@@ -8,11 +9,12 @@ describe('GameEngine (unit)', () => {
 
     beforeEach(() => {
         const round = new Round(['green']);
-        game = new GameEngine(round);
+        const state = new GameState(new Player('some player'), round);
+        game = new GameEngine(state);
     });
 
     it('should be able to create a new game instance with a round', () => {
-        const game = new GameEngine();
+        const game = GameEngine.create('some player');
         expect(game.state.roundColors).toHaveLength(1);
     });
 
