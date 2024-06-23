@@ -13,24 +13,8 @@ export class GameState extends Observable {
         super();
     }
 
-    public get currentColor(): string {
-        return this._currentColor;
-    }
-    
-    public get isPlayerTurn(): boolean {
-        return this._isPlayerTurn;
-    }
-
-    public get player(): Player {
-        return this._player;
-    }
-
-    public get round(): Round {
-        return this._round;
-    }
-
-    public get isGameOver(): boolean {
-        return this._isGameOver;
+    static new(player: string): GameState {
+        return new GameState(new Player(player));
     }
 
     changeCurrentColor(color: string): void {
@@ -64,5 +48,25 @@ export class GameState extends Observable {
             isPlayerTurn: this.isPlayerTurn,
             currentColor: this.currentColor,
         };
+    }
+
+    get currentColor(): string {
+        return this._currentColor;
+    }
+
+    get isPlayerTurn(): boolean {
+        return this._isPlayerTurn;
+    }
+
+    get player(): Player {
+        return this._player;
+    }
+
+    get round(): Round {
+        return this._round;
+    }
+
+    get isGameOver(): boolean {
+        return this._isGameOver;
     }
 }

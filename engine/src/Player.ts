@@ -1,13 +1,18 @@
 export class Player {
-    constructor(private readonly player: string) {}
+    constructor(
+        public readonly name: string,
+        private _selectedColors: string[] = []
+    ) {}
 
-    selectedColors: string[] = [];
+    get selectedColors(): string[] {
+        return [...this._selectedColors];
+    }
 
     selectColor(color: string): void {
-        this.selectedColors.push(color);
+        this._selectedColors.push(color);
     }
 
     clearSelectedColors(): void {
-        this.selectedColors = [];
+        this._selectedColors = [];
     }
 }
