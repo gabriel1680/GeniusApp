@@ -6,8 +6,7 @@ export class GameEngine {
     constructor(private readonly _state: GameState) {}
 
     public static create(player: string) {
-        const initialState = new GameState(new Player(player));
-        return new GameEngine(initialState);
+        return new GameEngine(GameState.new(player));
     }
 
     async start(): Promise<void> {
