@@ -9,6 +9,7 @@ export class GameEngine {
     }
 
     async start(): Promise<void> {
+        this._state.start();
         while (!this._state.isGameOver) {
             this._state.player.clearSelectedColors();
             await sleep();

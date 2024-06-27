@@ -14,7 +14,8 @@ export class GameState extends Observable {
         private _round: Round = Round.new(),
         private _isGameOver: boolean = false,
         private _isPlayerTurn: boolean = false,
-        private _currentColor: string = ""
+        private _isRunning = false,
+        private _currentColor: string = "",
     ) {
         super();
     }
@@ -30,7 +31,13 @@ export class GameState extends Observable {
 
     gameOver(): void {
         this._isGameOver = true;
+        this._isRunning = false;
         this.notify(GameState.EVENTS.GAME_OVER);
+    }
+
+    start(): void {
+        this._isRunning = true;
+        this._isGameOver = false;
     }
 
     setPlayerTurn(isPlayerTurn = true): void {
@@ -46,6 +53,7 @@ export class GameState extends Observable {
     restart(): void {
         this._round = Round.new();
         this.player.clearSelectedColors();
+        this.start();
     }
 
     toJSON() {
@@ -53,6 +61,7 @@ export class GameState extends Observable {
             roundColors: this.round.colors,
             playerSelectedColors: this.player.selectedColors,
             isGameOver: this.isGameOver,
+            isRunning: this.isRunning,
             isPlayerTurn: this.isPlayerTurn,
             currentColor: this.currentColor,
         };
@@ -76,5 +85,9 @@ export class GameState extends Observable {
 
     get isGameOver(): boolean {
         return this._isGameOver;
+    }
+
+    get isRunning(): boolean {
+        return this._isRunning;
     }
 }
