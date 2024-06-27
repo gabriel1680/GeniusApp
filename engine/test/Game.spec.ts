@@ -111,5 +111,22 @@ describe('GameEngine (unit)', () => {
             await promise;
         });
     });
+
+    describe('on player turn change', () => {
+        let playerTurnObserver: VoidFunction;
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+            playerTurnObserver = jest.fn();
+            game.onPlayerTurnColorChange(playerTurnObserver);
+        });
+
+        it('should be able to trigger the player turn change', async () => {
+            const promise = game.start();
+            await sleep(300);
+            expect(playerTurnObserver).toHaveBeenCalled();
+            await promise;
+        });
+    });
 });
 

@@ -3,6 +3,12 @@ import { Player } from "./Player";
 import { Round } from "./Round";
 
 export class GameState extends Observable {
+    static EVENTS = {
+        COLOR_CHANGED: "colorChanged",
+        GAME_OVER: "gameOver",
+        PLAYER_TURN_CHANGED: "playerTurnChanged",
+    };
+
     constructor(
         private _player: Player,
         private _round: Round = Round.new(),
@@ -19,20 +25,22 @@ export class GameState extends Observable {
 
     changeCurrentColor(color: string): void {
         this._currentColor = color;
-        this.notify("currentColorChange", color);
+        this.notify(GameState.EVENTS.COLOR_CHANGED, color);
     }
 
     gameOver(): void {
         this._isGameOver = true;
-        this.notify("gameOver");
+        this.notify(GameState.EVENTS.GAME_OVER);
     }
 
-    setPlayerTurn(): void {
-        this._isPlayerTurn = true;
+    setPlayerTurn(isPlayerTurn = true): void {
+        this._isPlayerTurn = isPlayerTurn;
+        this.notify(GameState.EVENTS.PLAYER_TURN_CHANGED, isPlayerTurn);
     }
 
     nextRound(): void {
         this._round = this.round.createNextRound();
+        this.setPlayerTurn(false);
     }
 
     restart(): void {

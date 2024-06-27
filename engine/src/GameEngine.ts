@@ -1,6 +1,5 @@
 import { sleep } from "./utils";
 import { GameState } from "./GameState";
-import { Player } from "./Player";
 
 export class GameEngine {
     constructor(private readonly _state: GameState) {}
@@ -57,11 +56,15 @@ export class GameEngine {
     }
 
     onGameOver(observer: VoidFunction): void {
-        this._state.on("gameOver", observer);
+        this._state.on(GameState.EVENTS.GAME_OVER, observer);
     }
 
     onCurrentColorChange(observer: VoidFunction): void {
-        this._state.on("currentColorChange", observer);
+        this._state.on(GameState.EVENTS.COLOR_CHANGED, observer);
+    }
+
+    onPlayerTurnColorChange(observer: VoidFunction): void {
+        this._state.on(GameState.EVENTS.PLAYER_TURN_CHANGED, observer);
     }
 
     playerPressColor(color: string): void {
