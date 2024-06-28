@@ -16,10 +16,19 @@ export default function Genius() {
     game.onCurrentColorChange(playSoundByColor);
     game.start();
 
+    function getTitle() {
+        if (game.state.isGameOver) return "";
+        return game.state.isPlayerTurn ? "Sua Vez" : "Observe";
+    }
+
+    function getOpacity() {
+        return game.state.isGameOver ? 0.3 : 1;
+    }
+
     return (
         <View style={styles.container}>
             <Title text={getTitle()} />
-            <View style={[styles.centerCircle, { opacity: (game.state.isGameOver ? 0.3 : 1) }]} />
+            <View style={[styles.centerCircle, { opacity: getOpacity() }]} />
             <GeniusButtons game={game} />
             <Score currentRound={game.state.roundColors.length} />
             {game.state.isGameOver && (
@@ -32,9 +41,4 @@ export default function Genius() {
             )}
         </View >
     );
-
-    function getTitle() {
-        if (game.state.isGameOver) return "";
-        return game.state.isPlayerTurn ? "Sua Vez" : "Observe";
-    }
 }
