@@ -12,7 +12,7 @@ import { PauseButton } from './PauseButton';
 import { playGameOverSound, playSoundByColor } from './sound';
 
 export default function Genius() {
-    const game = new GameEngine();
+    const game = GameEngine.create("New Player");
     const timer = new Timer();
     game.onGameOver(playGameOverSound);
     game.onCurrentColorChange(playSoundByColor);
