@@ -9,6 +9,10 @@ export class Timer {
         }
     }
 
+    togglePause() {
+        this._isPaused = !this._isPaused;
+    }
+
     get isPaused(): boolean {
         return this._isPaused;
     }

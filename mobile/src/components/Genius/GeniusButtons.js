@@ -4,35 +4,37 @@ import { TouchableOpacity, View } from "react-native";
 import styles from './styles';
 
 /**
- * @param {{ game: import('../../engine/GameEngine').GameEngine, disabled: boolean, coloToBlink: string }} param0
+ * Game buttons.
+ *
+ * @param {{ onPress: (color: string) => void, disabled: boolean, currentColor: boolean }} param0
  * @returns {JSX.Element}
  */
-function GeniusButtons({ game }) {
+function GeniusButtons({ disabled, currentColor, onPress }) {
   return (
     <>
       <View style={styles.topBottomButton}>
         <TouchableOpacity
-          onPressOut={() => game.playerPressColor('red')}
-          disabled={game.state.isPlayerTurn}>
+          onPressOut={() => onPress('red')}
+          disabled={disabled}>
           <View
             style={[
               styles.geniusButton,
               styles.topLeftButton,
               styles.redButton,
-              { opacity: game.state.currentColor === 'red' ? 1 : 0.3 },
+              { opacity: currentColor === 'red' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPressOut={() => game.playerPressColor('green')}
-          disabled={game.state.isPlayerTurn}>
+          onPressOut={() => onPress('green')}
+          disabled={disabled}>
           <View
             style={[
               styles.geniusButton,
               styles.topRightButton,
               styles.greenButton,
-              { opacity: game.state.currentColor === 'green' ? 1 : 0.3 },
+              { opacity: currentColor === 'green' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
@@ -40,27 +42,27 @@ function GeniusButtons({ game }) {
 
       <View style={styles.topBottomButton}>
         <TouchableOpacity
-          onPressOut={() => game.playerPressColor('yellow')}
-          disabled={game.state.isPlayerTurn}>
+          onPressOut={() => onPress('yellow')}
+          disabled={disabled}>
           <View
             style={[
               styles.geniusButton,
               styles.bottomLeftButton,
               styles.yellowButton,
-              { opacity: game.state.currentColor === 'yellow' ? 1 : 0.3 },
+              { opacity: currentColor === 'yellow' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPressOut={() => game.playerPressColor('blue')}
-          disabled={game.state.isPlayerTurn}>
+          onPressOut={() => onPress('blue')}
+          disabled={disabled}>
           <View
             style={[
               styles.geniusButton,
               styles.bottomRightButton,
               styles.blueButton,
-              { opacity: game.state.currentColor === 'blue' ? 1 : 0.3 },
+              { opacity: currentColor === 'blue' ? 1 : 0.3 },
             ]}
           />
         </TouchableOpacity>
