@@ -1,43 +1,84 @@
-import { Round } from "../src/Round";
+import { GameEvent, GameState, Player } from "../src";
 import { GameEngine } from "../src/GameEngine";
-import { sleep } from "../src/utils";
-import { GameState, Player } from "../src";
+import { Round } from "../src/Round";
 
 describe("GameEngine (unit)", () => {
     let game: GameEngine;
-    let gamePromise: Promise<void>;
 
     beforeEach(() => {
         const round = new Round(["green"]);
         const state = new GameState(new Player("some player"), round);
         game = new GameEngine(state);
-        gamePromise = game.start();
+        game.start();
     });
 
-    afterEach(async () => {
-        await gamePromise;
-    });
+    function updateGameTimes(n: number) {
+        for (let i = 0; i < n; i++) {
+            game.update();
+        }
+    }
 
-    it("should be able to create a new game instance with a round", () => {
-        const game = GameEngine.create("some player");
+    it("should create a new game instance", () => {
+        game = GameEngine.create("some player");
         expect(game.state.roundColors).toHaveLength(1);
     });
 
-    it("should be able to calculate when the color is incorrect when pressed in relation to the round colors", () => {
-        game.playerPressColor("green");
+    it("should start with one round and blinking state", () => {
         expect(game.state.isGameOver).toBeFalsy();
+        expect(game.state.roundColors).toHaveLength(1);
         expect(game.state.isRunning).toBeTruthy();
     });
 
-    it("should be able to calculate when the color is correct when pressed in relation to the round colors", () => {
-        game.playerPressColor("red");
+    it('given a game started, when update, then should stay at "blinking" state', () => {
+        updateGameTimes(1);
+        expect(game.state.isPlayerTurn).toBeFalsy();
+    });
+
+    it('given a game started and updated one time, when update again, then should stay at "blinking" state', () => {
+        updateGameTimes(2);
+        expect(game.state.isPlayerTurn).toBeFalsy();
+    });
+
+    it('after game blinking game should be at "playerTurn state"', () => {
+        updateGameTimes(3);
+        expect(game.state.isPlayerTurn).toBeTruthy();
+    });
+
+    it("after player turn, if it does not make a choice, then should be game over", () => {
+        updateGameTimes(4);
+        expect(game.state.isGameOver).toBeTruthy();
+    });
+
+    it("after player turn, when it does make a wrong choice, then should be game over", () => {
+        updateGameTimes(3);
+        game.playerPressColor("yellow");
+        game.update();
         expect(game.state.isGameOver).toBeTruthy();
         expect(game.state.isRunning).toBeFalsy();
     });
 
-    it("should be able to go to next round", () => {
-        game.nextRound();
+    it("after player turn, when it does make a right choice, then should pass to another round", () => {
+        updateGameTimes(3);
+        game.playerPressColor("green");
+        updateGameTimes(1);
+        expect(game.state.isGameOver).toBeFalsy();
         expect(game.state.roundColors).toHaveLength(2);
+        expect(game.state.isRunning).toBeTruthy();
+    });
+
+    it("should game over when not select a color", () => {
+        game.update();
+        expect(game.state.isPlayerTurn).toBeFalsy();
+
+        game.update();
+        expect(game.state.isPlayerTurn).toBeFalsy();
+
+        game.update();
+        expect(game.state.isPlayerTurn).toBeTruthy();
+
+        game.update();
+        expect(game.state.isGameOver).toBeTruthy();
+        expect(game.state.isRunning).toBeFalsy();
     });
 
     it("should be able to restart game", () => {
@@ -53,30 +94,6 @@ describe("GameEngine (unit)", () => {
         expect(game.state.isGameOver).toBeFalsy();
     });
 
-    it("should be able to pass the round when player chose the right color", async () => {
-        await sleep(500);
-        game.playerPressColor("green");
-        await sleep(500);
-        expect(game.state.roundColors).toHaveLength(2);
-    });
-
-    it("should be able to call player turn changed callback", async () => {
-        await sleep(500);
-        game.playerPressColor("green");
-        await sleep(500);
-        expect(game.state.roundColors).toHaveLength(2);
-    });
-
-    it("should be able to await more as round length increases", async () => {
-        await sleep(300);
-        game.playerPressColor("green");
-        await sleep(1000);
-        game.playerPressColor("green");
-        game.playerPressColor(game.state.roundColors.at(-1)!);
-        await sleep(1300);
-        expect(game.state.roundColors).toHaveLength(3);
-    });
-
     describe("game events", () => {
         let gameOverObserver: VoidFunction;
         let colorChangedObserver: VoidFunction;
@@ -87,9 +104,9 @@ describe("GameEngine (unit)", () => {
             gameOverObserver = jest.fn();
             colorChangedObserver = jest.fn();
             playerTurnChangedObserver = jest.fn();
-            game.onGameOver(gameOverObserver);
-            game.onCurrentColorChange(colorChangedObserver);
-            game.onPlayerTurnColorChange(playerTurnChangedObserver);
+            game.on(GameEvent.GAME_OVER, gameOverObserver);
+            game.on(GameEvent.COLOR_CHANGED, colorChangedObserver);
+            game.on(GameEvent.PLAYER_TURN_CHANGED, playerTurnChangedObserver);
         });
 
         it("should be able to notify on game over", () => {
@@ -103,7 +120,8 @@ describe("GameEngine (unit)", () => {
         });
 
         it("should be able to game over when player does not click on colors after timer", async () => {
-            await sleep(2000);
+            game.start();
+            updateGameTimes(4);
             expect(game.state.isGameOver).toBeTruthy();
             expect(gameOverObserver).toHaveBeenCalled();
             expect(playerTurnChangedObserver).toHaveBeenCalled();

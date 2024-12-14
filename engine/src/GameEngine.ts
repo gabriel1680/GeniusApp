@@ -1,5 +1,4 @@
-import { sleep } from "./utils";
-import { GameState } from "./GameState";
+import { GameEvent, GameState } from "./GameState";
 
 export class GameEngine {
     constructor(private readonly _state: GameState) {}
@@ -8,32 +7,43 @@ export class GameEngine {
         return new GameEngine(GameState.new(player));
     }
 
-    async start(): Promise<void> {
+    start(): void {
         this._state.start();
-        while (!this._state.isGameOver) {
-            this._state.player.clearSelectedColors();
-            await sleep();
-            await this.blinkColors();
+    }
+
+    public update(): void {
+        if (this._state.isGameOver) {
+            return;
+        }
+        if (!this.state.isPlayerTurn) {
+            this.blinkColors();
+            return;
+        }
+        this.verifyAllPlayerPressedColors()
+            ? this._state.nextRound()
+            : this._state.gameOver();
+    }
+
+    private lastBlinkedIdx = -1;
+    private lastBlinkedColor: string | null = null;
+
+    private blinkColors(): void {
+        if (
+            this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
+            this.lastBlinkedColor === ""
+        ) {
             this._state.setPlayerTurn();
-            await this.waitForPlayerSelect();
-            this.verifyAllPlayerPressedColors()
-                ? this.nextRound()
-                : this._state.gameOver();
+            return;
         }
-    }
 
-    private async blinkColors(): Promise<void> {
-        for (const color of this._state.round.colors) {
-            this._state.changeCurrentColor(color);
-            await sleep();
-            this._state.changeCurrentColor("");
-            await sleep();
+        if (this.lastBlinkedColor === "" || this.lastBlinkedColor === null) {
+            this.lastBlinkedColor =
+                this._state.round.colors[this.lastBlinkedIdx++];
+        } else {
+            this.lastBlinkedColor = "";
         }
-    }
 
-    private async waitForPlayerSelect(): Promise<void> {
-        const MIN_TIME_TO_WAIT = 500;
-        await sleep(MIN_TIME_TO_WAIT * this._state.round.colors.length);
+        this._state.changeCurrentColor(this.lastBlinkedColor);
     }
 
     private verifyAllPlayerPressedColors(): boolean {
@@ -56,16 +66,8 @@ export class GameEngine {
         return true;
     }
 
-    onGameOver(observer: VoidFunction): void {
-        this._state.on(GameState.EVENTS.GAME_OVER, observer);
-    }
-
-    onCurrentColorChange(observer: VoidFunction): void {
-        this._state.on(GameState.EVENTS.COLOR_CHANGED, observer);
-    }
-
-    onPlayerTurnColorChange(observer: VoidFunction): void {
-        this._state.on(GameState.EVENTS.PLAYER_TURN_CHANGED, observer);
+    on(event: GameEvent, observer: VoidFunction): void {
+        this._state.on(event, observer);
     }
 
     playerPressColor(color: string): void {
@@ -73,10 +75,6 @@ export class GameEngine {
         if (!this.verifyPlayerPressedColors()) {
             this._state.gameOver();
         }
-    }
-
-    nextRound(): void {
-        this._state.nextRound();
     }
 
     restart(): void {

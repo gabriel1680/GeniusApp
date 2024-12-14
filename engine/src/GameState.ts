@@ -3,19 +3,13 @@ import { Player } from "./Player";
 import { Round } from "./Round";
 
 export class GameState extends Observable {
-    static EVENTS = {
-        COLOR_CHANGED: "colorChanged",
-        GAME_OVER: "gameOver",
-        PLAYER_TURN_CHANGED: "playerTurnChanged",
-    };
-
     constructor(
         private _player: Player,
         private _round: Round = Round.new(),
         private _isGameOver: boolean = false,
         private _isPlayerTurn: boolean = false,
         private _isRunning = false,
-        private _currentColor: string = "",
+        private _currentColor: string = ""
     ) {
         super();
     }
@@ -26,27 +20,29 @@ export class GameState extends Observable {
 
     changeCurrentColor(color: string): void {
         this._currentColor = color;
-        this.notify(GameState.EVENTS.COLOR_CHANGED, color);
+        this.notify(GameEvent.COLOR_CHANGED, color);
     }
 
     gameOver(): void {
         this._isGameOver = true;
         this._isRunning = false;
-        this.notify(GameState.EVENTS.GAME_OVER);
+        this.notify(GameEvent.GAME_OVER);
     }
 
     start(): void {
         this._isRunning = true;
         this._isGameOver = false;
+        this._isPlayerTurn = false;
     }
 
     setPlayerTurn(isPlayerTurn = true): void {
         this._isPlayerTurn = isPlayerTurn;
-        this.notify(GameState.EVENTS.PLAYER_TURN_CHANGED, isPlayerTurn);
+        this.notify(GameEvent.PLAYER_TURN_CHANGED, isPlayerTurn);
     }
 
     nextRound(): void {
         this._round = this.round.createNextRound();
+        this.player.clearSelectedColors();
         this.setPlayerTurn(false);
     }
 
@@ -90,4 +86,10 @@ export class GameState extends Observable {
     get isRunning(): boolean {
         return this._isRunning;
     }
+}
+
+export enum GameEvent {
+    COLOR_CHANGED = "colorChanged",
+    GAME_OVER = "gameOver",
+    PLAYER_TURN_CHANGED = "playerTurnChanged",
 }
