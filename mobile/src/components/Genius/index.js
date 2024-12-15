@@ -12,7 +12,7 @@ import { PauseButton } from './PauseButton';
 import { playGameOverSound, playSoundByColor } from './sound';
 
 export default function Genius() {
-    const game = GameEngine.create("New Player");
+    const game = GameEngine.create('New Player');
     const timer = new Timer();
     game.onGameOver(playGameOverSound);
     game.onCurrentColorChange(playSoundByColor);
@@ -36,10 +36,9 @@ export default function Genius() {
 
     return (
         <View style={styles.container}>
-            <PauseButton
-                isPaused={timer.isPaused}
-                onPress={() => timer.togglePause()}
-            />
+            {timer.isPaused && (
+                <PauseButton onPress={() => timer.togglePause()} />
+            )}
             <Title text={getTitle()} />
             <View style={[styles.centerCircle, { opacity: getOpacity() }]} />
             <GeniusButtons
