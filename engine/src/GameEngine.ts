@@ -15,7 +15,7 @@ export class GameEngine {
         if (this._state.isGameOver) {
             return;
         }
-        if (!this.state.isPlayerTurn) {
+        if (!this._state.isPlayerTurn) {
             this.blinkColors();
             return;
         }
