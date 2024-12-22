@@ -35,6 +35,20 @@ describe("GameEngine (unit)", () => {
         expect(game.state.isPlayerTurn).toBeFalsy();
     });
 
+    it("should blink multiple round colors each rendering cycle", () => {
+        expect(game.state.currentColor).toBe("");
+        game.update();
+        expect(game.state.currentColor).toBe("green");
+        game.update();
+        expect(game.state.currentColor).toBe("");
+        game.update();
+        game.playerPressColor("green");
+        game.update();
+        expect(game.state.currentColor).toBe("");
+        game.update();
+        expect(game.state.currentColor).toBe("");
+    });
+
     it('given a game started and updated one time, when update again, then should stay at "blinking" state', () => {
         updateGameTimes(2);
         expect(game.state.currentColor).toBe("");
@@ -69,6 +83,7 @@ describe("GameEngine (unit)", () => {
         expect(game.state.isRunning).toBeTruthy();
     });
 
+    // TODO: extract this test into integration tests
     it("should game over when not select a color", () => {
         game.update();
         expect(game.state.isPlayerTurn).toBeFalsy();
@@ -83,6 +98,7 @@ describe("GameEngine (unit)", () => {
         game.update();
         expect(game.state.isGameOver).toBeTruthy();
         expect(game.state.isRunning).toBeFalsy();
+        expect(game.state.isPlayerTurn).toBeFalsy();
     });
 
     it("should be able to restart game", () => {

@@ -38,6 +38,8 @@ export class GameEngine {
             this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
             this.lastBlinkedColor === ""
         ) {
+            // reset idx
+            this.lastBlinkedIdx = -1;
             this._state.setPlayerTurn();
             return;
         }

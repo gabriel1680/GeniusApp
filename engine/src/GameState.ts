@@ -26,6 +26,7 @@ export class GameState extends Observable {
     gameOver(): void {
         this._isGameOver = true;
         this._isRunning = false;
+        this._isPlayerTurn = false;
         this.notify(GameEvent.GAME_OVER);
     }
 
