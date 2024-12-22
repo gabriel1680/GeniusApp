@@ -9,7 +9,7 @@
   },
   "workspaces": [
     "engine",
-    "mobile"
+    "genius-mobile"
   ],
   "keywords": [
       "genius", 
