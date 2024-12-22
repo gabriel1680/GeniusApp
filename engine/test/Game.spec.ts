@@ -31,16 +31,19 @@ describe("GameEngine (unit)", () => {
 
     it('given a game started, when update, then should stay at "blinking" state', () => {
         updateGameTimes(1);
+        expect(game.state.currentColor).toBe("green");
         expect(game.state.isPlayerTurn).toBeFalsy();
     });
 
     it('given a game started and updated one time, when update again, then should stay at "blinking" state', () => {
         updateGameTimes(2);
+        expect(game.state.currentColor).toBe("");
         expect(game.state.isPlayerTurn).toBeFalsy();
     });
 
     it('after game blinking game should be at "playerTurn state"', () => {
         updateGameTimes(3);
+        expect(game.state.currentColor).toBe("");
         expect(game.state.isPlayerTurn).toBeTruthy();
     });
 

@@ -44,7 +44,7 @@ export class GameEngine {
 
         if (this.lastBlinkedColor === "" || this.lastBlinkedColor === null) {
             this.lastBlinkedColor =
-                this._state.round.colors[this.lastBlinkedIdx++];
+                this._state.round.colors[++this.lastBlinkedIdx];
         } else {
             this.lastBlinkedColor = "";
         }
