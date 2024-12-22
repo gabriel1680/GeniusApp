@@ -89,7 +89,6 @@ export class GameEngine {
 
     restart(): void {
         this._state.restart();
-        this.start();
     }
 
     get state() {
