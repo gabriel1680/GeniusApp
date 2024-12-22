@@ -1,50 +1,47 @@
-# Welcome to your Expo app 👋
+# GeniusApp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Descrição
 
-## Get started
+O famoso jogo de memória, porém recriado com react native.
 
-1. Install dependencies
+- splash screen
 
-   ```bash
-   npm install
-   ```
+- Tela de início
+- Som das teclas
+- Som de game over
+- Marcador de pontos e melhor pontuação
+- Tela de game over
 
-2. Start the app
+## Imagens
 
-   ```bash
-    npx expo start
-   ```
+- Icone
 
-In the output, you'll find options to open the app in a
+<img width="150" height="300" alt="icon" src="https://user-images.githubusercontent.com/72470217/129493960-0f98884d-9a88-46f5-acca-0cf391fd531b.png">
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Splash screen.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+<img width="150" height="300" alt="splash" src="https://user-images.githubusercontent.com/72470217/129493978-059ae1a9-9941-4267-a7ef-edebe7a5780e.png">
 
-## Get a fresh project
+- Tela de início.
 
-When you're ready, run:
+<img width="150" height="300" alt="Start" src="https://user-images.githubusercontent.com/72470217/129456684-71097454-b016-4845-a344-754ae5c48a37.png">
 
-```bash
-npm run reset-project
-```
+- Gerando cores aleatórias com som.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+<img width="150" height="300" alt="Observe" src="https://user-images.githubusercontent.com/72470217/129456689-bc99c09d-11ef-46ba-a19a-a177c6d51f2f.png">
 
-## Learn more
+- Vez do usuário repetir a sequencia de teclas mostrada.
 
-To learn more about developing your project with Expo, look at the following resources:
+<img width="150" height="300" alt="sua_vez" src="https://user-images.githubusercontent.com/72470217/129456691-de7c4632-1593-4309-b4a7-104704eed84d.png">
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Início do terceiro round
 
-## Join the community
+<img width="150" height="300" alt="round3" src="https://user-images.githubusercontent.com/72470217/129456693-9b3af3f2-9ebf-40cf-b81b-054b580e8d4b.png">
 
-Join our community of developers creating universal apps.
+- Game Over (quando o usuário erra a sequência)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<img width="150" height="300" alt="game_over" src="https://user-images.githubusercontent.com/72470217/129456695-9eec48bc-babb-4b47-9cdd-1714b9092156.png">
+
+- O progresso é mantido no estado do componente até que o aplicativo seja fechado
+
+<img width="150" height="300" alt="score" src="https://user-images.githubusercontent.com/72470217/129456696-c9e7dea5-6d30-4080-96ad-d11fb52cff93.png">
