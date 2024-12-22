@@ -45,7 +45,7 @@ describe("GameEngine (unit)", () => {
     });
 
     it("after player turn, if it does not make a choice, then should be game over", () => {
-        updateGameTimes(4);
+        updateGameTimes(5);
         expect(game.state.isGameOver).toBeTruthy();
     });
 
@@ -60,7 +60,7 @@ describe("GameEngine (unit)", () => {
     it("after player turn, when it does make a right choice, then should pass to another round", () => {
         updateGameTimes(3);
         game.playerPressColor("green");
-        updateGameTimes(1);
+        updateGameTimes(2);
         expect(game.state.isGameOver).toBeFalsy();
         expect(game.state.roundColors).toHaveLength(2);
         expect(game.state.isRunning).toBeTruthy();
@@ -76,6 +76,7 @@ describe("GameEngine (unit)", () => {
         game.update();
         expect(game.state.isPlayerTurn).toBeTruthy();
 
+        game.update();
         game.update();
         expect(game.state.isGameOver).toBeTruthy();
         expect(game.state.isRunning).toBeFalsy();
@@ -121,7 +122,7 @@ describe("GameEngine (unit)", () => {
 
         it("should be able to game over when player does not click on colors after timer", async () => {
             game.start();
-            updateGameTimes(4);
+            updateGameTimes(5);
             expect(game.state.isGameOver).toBeTruthy();
             expect(gameOverObserver).toHaveBeenCalled();
             expect(playerTurnChangedObserver).toHaveBeenCalled();

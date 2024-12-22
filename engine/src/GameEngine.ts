@@ -19,6 +19,12 @@ export class GameEngine {
             this.blinkColors();
             return;
         }
+        if (this._ticks < this._state.round.colors.length) {
+            this._ticks++;
+            return;
+        }
+        // reset ticks
+        this._ticks = 0;
         this.verifyAllPlayerPressedColors()
             ? this._state.nextRound()
             : this._state.gameOver();
@@ -45,6 +51,8 @@ export class GameEngine {
 
         this._state.changeCurrentColor(this.lastBlinkedColor);
     }
+
+    private _ticks = 0;
 
     private verifyAllPlayerPressedColors(): boolean {
         for (let i = 0; i < this._state.round.colors.length; i++)
