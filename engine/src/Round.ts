@@ -1,11 +1,11 @@
 export class Round {
 
-    static COLORS = ['red', 'green', 'blue', 'yellow'];
+    static COLORS = ["red", "green", "blue", "yellow"];
 
     colors: string[];
 
     constructor(colors: string[] = []) {
-        this.colors = colors;
+        this.colors = [...colors];
     }
 
     private generateRoundColors() {
@@ -40,4 +40,3 @@ export class Round {
         return round;
     }
 }
-
