@@ -2,14 +2,14 @@ export class Round {
 
     static COLORS = ["red", "green", "blue", "yellow"];
 
-    colors: string[];
+    private _colors: string[];
 
     constructor(colors: string[] = []) {
-        this.colors = [...colors];
+        this._colors = [...colors];
     }
 
     private generateRoundColors() {
-        this.colors.push(this.getRandomColor());
+        this._colors.push(this.getRandomColor());
     }
 
     private getRandomColor() {
@@ -27,16 +27,20 @@ export class Round {
     }
 
     getLastColor(): string {
-        return this.colors.at(-1) as string;
+        return this._colors.at(-1) as string;
     }
 
     static from(aRound: Round): Round {
-        return new Round(aRound.colors);
+        return new Round(aRound._colors);
     }
 
     static new(): Round {
         const round = new Round([]);
         round.generateRoundColors();
         return round;
+    }
+
+    get colors(): string[] {
+        return [...this._colors];
     }
 }
