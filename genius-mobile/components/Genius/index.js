@@ -16,6 +16,7 @@ const clock = new Clock();
 game.start();
 
 export default function Genius() {
+    // TODO: add sound effects
     const [_, setTick] = useState(0);
     const [isPaused, setIsPaused] = useState(clock.isPaused);
 
@@ -42,22 +43,18 @@ export default function Genius() {
         return game.state.isPlayerTurn ? 'Sua Vez' : 'Observe';
     }
 
-    function getOpacity() {
-        return game.state.isGameOver ? 0.3 : 1;
-    }
-
     return (
         <View style={styles.container}>
             {/* TODO: add black overlay when game paused to prevent click buttons */}
             <PauseButton isPaused={clock.isPaused} onPress={onPauseOrResume} />
             <Title text={getTitle()} />
-            <View style={[styles.centerCircle, { opacity: getOpacity() }]} />
             <GeniusButtons
                 disabled={!game.state.isPlayerTurn}
                 currentColor={game.state.currentColor}
                 onPress={color => game.playerPressColor(color)}
             />
             <Score currentRound={game.state.roundColors.length} />
+            {/* TODO: add black overlay when over  */}
             {game.state.isGameOver && (
                 <View style={styles.restartContainer}>
                     <Text style={styles.restartTitle}>Game Over )=</Text>
