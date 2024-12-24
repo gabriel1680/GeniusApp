@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import styles from './styles';
+import { GeniusButton } from './GeniusButton';
 
 /**
  * Game buttons.
@@ -10,24 +11,6 @@ import styles from './styles';
  * @returns {JSX.Element}
  */
 function GeniusButtons({ disabled, currentColor, onPress }) {
-    const buttonsSchema = [
-        {
-            color: 'red',
-            styles: [styles.topLeftButton, styles.redButton],
-        },
-        {
-            color: 'green',
-            styles: [styles.topRightButton, styles.greenButton],
-        },
-        {
-            color: 'yellow',
-            styles: [styles.bottomLeftButton, styles.yellowButton],
-        },
-        {
-            color: 'blue',
-            styles: [styles.bottomRightButton, styles.blueButton],
-        },
-    ];
     return (
         <View style={styles.buttonsContainer}>
             <FlatList
@@ -36,7 +19,7 @@ function GeniusButtons({ disabled, currentColor, onPress }) {
                 data={buttonsSchema}
                 renderItem={({ item }) => (
                     <GeniusButton
-                        schema={item}
+                        style={item.styles}
                         disabled={disabled}
                         opacity={currentColor === item.color ? 1 : 0.3}
                         onPress={() => onPress(item.color)}
@@ -49,20 +32,23 @@ function GeniusButtons({ disabled, currentColor, onPress }) {
     );
 }
 
-function GeniusButton({ schema, opacity, disabled, onPress }) {
-    return (
-        <TouchableOpacity onPress={onPress} disabled={disabled}>
-            <View
-                style={[
-                    styles.geniusButton,
-                    ...schema.styles,
-                    {
-                        opacity: opacity,
-                    },
-                ]}
-            />
-        </TouchableOpacity>
-    );
-}
+const buttonsSchema = [
+    {
+        color: 'red',
+        styles: [styles.topLeftButton, styles.redButton],
+    },
+    {
+        color: 'green',
+        styles: [styles.topRightButton, styles.greenButton],
+    },
+    {
+        color: 'yellow',
+        styles: [styles.bottomLeftButton, styles.yellowButton],
+    },
+    {
+        color: 'blue',
+        styles: [styles.bottomRightButton, styles.blueButton],
+    },
+];
 
 export default GeniusButtons;
