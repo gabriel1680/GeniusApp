@@ -5,21 +5,13 @@ import styles from './styles';
 
 /**
  *
- * @param {{style: import('react-native').ViewStyle, opacity: number, disabled: boolean, onPress: Function}} param0
- * @returns
+ * @param {{style: import('react-native').ViewStyle, disabled: boolean, onPress: Function}} param0
+ * @returns {JSX.Element}
  */
-export function GeniusButton({ style, opacity, disabled, onPress }) {
+export function GeniusButton({ style, disabled, onPress }) {
     return (
         <TouchableOpacity onPress={onPress} disabled={disabled}>
-            <View
-                style={[
-                    styles.geniusButton,
-                    ...style,
-                    {
-                        opacity: opacity,
-                    },
-                ]}
-            />
+            <View style={[styles.geniusButton, ...style]} />
         </TouchableOpacity>
     );
 }

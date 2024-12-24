@@ -1,8 +1,8 @@
 import React from 'react';
 import { FlatList, View } from 'react-native';
 
-import styles from './styles';
 import { GeniusButton } from './GeniusButton';
+import styles from './styles';
 
 /**
  * Game buttons.
@@ -11,6 +11,10 @@ import { GeniusButton } from './GeniusButton';
  * @returns {JSX.Element}
  */
 function GeniusButtons({ disabled, currentColor, onPress }) {
+    function getOpacity(color) {
+        return currentColor === color ? 1 : 0.3;
+    }
+
     return (
         <View style={styles.buttonsContainer}>
             <FlatList
@@ -19,9 +23,11 @@ function GeniusButtons({ disabled, currentColor, onPress }) {
                 data={buttonsSchema}
                 renderItem={({ item }) => (
                     <GeniusButton
-                        style={item.styles}
+                        style={[
+                            ...item.styles,
+                            { opacity: getOpacity(item.color) },
+                        ]}
                         disabled={disabled}
-                        opacity={currentColor === item.color ? 1 : 0.3}
                         onPress={() => onPress(item.color)}
                     />
                 )}
