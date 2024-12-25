@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import Score from '../Score';
@@ -9,6 +9,7 @@ import { Clock, GameEngine } from '@genius/engine';
 
 import GeniusButtons from './GeniusButtons';
 import { PauseButton } from './PauseButton';
+import { TimeoutBar } from './TimeoutBar';
 
 // TODO: extract this to app state or provider
 const game = GameEngine.create('New Player');
@@ -53,6 +54,9 @@ export default function Genius() {
                 currentColor={game.state.currentColor}
                 onPress={color => game.playerPressColor(color)}
             />
+            {game.state.isPlayerTurn && (
+                <TimeoutBar millis={game.state.roundColors.length * 1000} />
+            )}
             <Score currentRound={game.state.roundColors.length} />
             {/* TODO: add black overlay when over  */}
             {game.state.isGameOver && (
