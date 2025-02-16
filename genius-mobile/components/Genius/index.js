@@ -55,7 +55,10 @@ export default function Genius() {
                 onPress={color => game.playerPressColor(color)}
             />
             {game.state.isPlayerTurn && (
-                <TimeoutBar millis={game.state.roundColors.length * 1000} />
+                <TimeoutBar
+                    isPaused={isPaused}
+                    millis={game.state.roundColors.length * 1000}
+                />
             )}
             <Score currentRound={game.state.roundColors.length} />
             {/* TODO: add black overlay when over  */}
