@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Clock } from '@genius/engine';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { ProgressBar } from '../ProgressBar/ProgressBar';
 
@@ -43,24 +43,28 @@ function ClockProvider({ children }) {
  */
 export function TimeoutBar({ millis, isPaused = false }) {
     const [step, setStep] = useState(millis);
-    const [pause, setPause] = useState(isPaused);
+    const [intervalId, setIntervalId] = useState(undefined);
 
-    // TODO: Fix bug, when pause game, this timer continues to clock down.
-    // Maybe add a context with clock global state.
-    useEffect(() => {
+    function createInterval() {
         const countingRatio = 100;
-        const intervalId = setInterval(() => {
-            if (step === 0 || pause) {
+        const interval = setInterval(() => {
+            if (step === 0 || isPaused) {
+                clearInterval(interval || intervalId);
                 return;
             }
             setStep(prev => (prev -= countingRatio));
         }, countingRatio);
-
-        return () => clearInterval(intervalId);
-    }, []);
+        return interval;
+    }
 
     useEffect(() => {
-        setPause(isPaused);
+        if (isPaused) {
+            intervalId && clearInterval(intervalId);
+        } else {
+            const interval = createInterval();
+            setIntervalId(interval);
+            return () => intervalId && clearInterval(intervalId);
+        }
     }, [isPaused]);
 
     return <ProgressBar step={step} steps={millis} />;
