@@ -5,20 +5,24 @@ import Score from '../Score';
 import Title from '../Title';
 import styles from './styles';
 
-import { Clock, GameEngine } from '@genius/engine';
+import { Clock, GameEngine, GameEvent } from '@genius/engine';
 
 import GeniusButtons from './GeniusButtons';
 import { PauseButton } from './PauseButton';
 import { TimeoutBar } from './TimeoutBar';
 import { GameOver } from './GameOver';
+import SoundPlayer from '@/services/sound/SoundPlayer';
 
 // TODO: extract this to app state or provider
 const game = GameEngine.create('New Player');
 const clock = new Clock();
 game.start();
 
+const soundPlayer = new SoundPlayer();
+game.on(GameEvent.COLOR_CHANGED, color => soundPlayer.playFor(color));
+game.on(GameEvent.GAME_OVER, () => soundPlayer.playFor('gameOver'));
+
 export default function Genius() {
-    // TODO: add sound effects
     const [_, setTick] = useState(0);
     const [isPaused, setIsPaused] = useState(clock.isPaused);
 
