@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 
 import Score from '../Score';
 import Title from '../Title';
@@ -10,6 +10,7 @@ import { Clock, GameEngine } from '@genius/engine';
 import GeniusButtons from './GeniusButtons';
 import { PauseButton } from './PauseButton';
 import { TimeoutBar } from './TimeoutBar';
+import { GameOver } from './GameOver';
 
 // TODO: extract this to app state or provider
 const game = GameEngine.create('New Player');
@@ -63,14 +64,7 @@ export default function Genius() {
             <Score currentRound={game.state.roundColors.length} />
             {/* TODO: add black overlay when over  */}
             {game.state.isGameOver && (
-                <View style={styles.restartContainer}>
-                    <Text style={styles.restartTitle}>Game Over )=</Text>
-                    <TouchableOpacity
-                        onPress={() => game.restart()}
-                        style={styles.restartButton}>
-                        <Text style={styles.restartButtonText}>Recomeçar</Text>
-                    </TouchableOpacity>
-                </View>
+                <GameOver onRestart={() => game.restart()} />
             )}
         </View>
     );
