@@ -12,6 +12,7 @@ import { PauseButton } from './PauseButton';
 import { TimeoutBar } from './TimeoutBar';
 import { GameOver } from './GameOver';
 import SoundPlayer from '@/services/sound/SoundPlayer';
+import EnvironmentManager from '@/services/EnvironmentManager';
 
 // TODO: extract this to app state or provider
 const game = GameEngine.create('New Player');
@@ -33,8 +34,6 @@ export default function Genius() {
         }
     }
 
-    console.debug({ state: game.state });
-
     useEffect(() => {
         mainLoop();
     }, [isPaused]);
@@ -47,6 +46,10 @@ export default function Genius() {
     function getTitle() {
         if (game.state.isGameOver) return '';
         return game.state.isPlayerTurn ? 'Sua Vez' : 'Observe';
+    }
+
+    if (EnvironmentManager.isDev) {
+        console.debug({ state: game.state });
     }
 
     return (
