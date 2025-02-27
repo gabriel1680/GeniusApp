@@ -57,14 +57,17 @@ export class GameEngine {
     private _ticks = 0;
 
     private verifyAllPlayerPressedColors(): boolean {
-        for (let i = 0; i < this._state.round.colors.length; i++)
-            if (this.isWrongColor(i)) return false;
-        return true;
+        return this.haveWrongAnswer(this._state.round.colors.length);
     }
 
     private verifyPlayerPressedColors(): boolean {
-        for (let i = 0; i < this._state.player.selectedColors.length; i++)
+        return this.haveWrongAnswer(this._state.player.selectedColors.length);
+    }
+
+    private haveWrongAnswer(n: number): boolean {
+        for (let i = 0; i < n; i++) {
             if (this.isWrongColor(i)) return false;
+        }
         return true;
     }
 
