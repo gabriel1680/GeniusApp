@@ -7,9 +7,10 @@ import styles from './styles';
 
 import {
     Clock,
+    ClockEvents,
     GameEngine,
     GameEvent,
-    NodeJSScheduler
+    NodeJSScheduler,
 } from '@genius/engine';
 
 import EnvironmentManager from '@/services/EnvironmentManager';
@@ -33,7 +34,7 @@ export default function Genius() {
     const [isPaused, setIsPaused] = useState(clock.isPaused);
 
     useEffect(() => {
-        clock.on('tick', () => {
+        clock.on(ClockEvents.TICK, () => {
             game.update();
             setTick(prev => (prev += 1));
         });
