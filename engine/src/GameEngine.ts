@@ -58,22 +58,20 @@ export class GameEngine {
 
     private verifyAllPlayerPressedColors(): boolean {
         for (let i = 0; i < this._state.round.colors.length; i++)
-            if (
-                this._state.player.selectedColors[i] !==
-                this._state.round.colors[i]
-            )
-                return false;
+            if (this.isWrongColor(i)) return false;
         return true;
     }
 
     private verifyPlayerPressedColors(): boolean {
         for (let i = 0; i < this._state.player.selectedColors.length; i++)
-            if (
-                this._state.player.selectedColors[i] !==
-                this._state.round.colors[i]
-            )
-                return false;
+            if (this.isWrongColor(i)) return false;
         return true;
+    }
+
+    private isWrongColor(i: number) {
+        return (
+            this._state.player.selectedColors[i] !== this._state.round.colors[i]
+        );
     }
 
     on(event: GameEvent, observer: VoidFunction): void {
