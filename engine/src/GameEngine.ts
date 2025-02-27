@@ -34,27 +34,36 @@ export class GameEngine {
     private lastBlinkedColor: string | null = null;
 
     private blinkColors(): void {
-        if (
-            this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
-            this.lastBlinkedColor === ""
-        ) {
+        if (this.isLastBlinkBeforePlayerTurn()) {
             // reset idx
             this.lastBlinkedIdx = -1;
             this._state.setPlayerTurn();
             return;
         }
-
-        if (this.lastBlinkedColor === "" || this.lastBlinkedColor === null) {
-            this.lastBlinkedColor =
-                this._state.round.colors[++this.lastBlinkedIdx];
-        } else {
-            this.lastBlinkedColor = "";
-        }
-
+        this.lastBlinkedColor = this.getLastBlinkedColor();
         this._state.changeCurrentColor(this.lastBlinkedColor);
     }
 
     private _ticks = 0;
+
+    private isLastBlinkBeforePlayerTurn() {
+        return (
+            this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
+            this.lastBlinkedColor === ""
+        );
+    }
+
+    private getLastBlinkedColor() {
+        if (this.isLastBlinkedColorEmpty()) {
+            return this._state.round.colors[++this.lastBlinkedIdx];
+        } else {
+            return "";
+        }
+    }
+
+    private isLastBlinkedColorEmpty() {
+        return this.lastBlinkedColor === "" || this.lastBlinkedColor === null;
+    }
 
     private verifyAllPlayerPressedColors(): boolean {
         return this.haveWrongAnswer(this._state.round.colors.length);
