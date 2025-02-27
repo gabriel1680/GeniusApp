@@ -1,17 +1,20 @@
 import { ColorBlinker } from "./ColorBlinker";
-import { RoundFrame } from "./RoundFrame";
+import { CycleExecutor } from "./CycleExecutor";
 import { GameRules } from "./GameRules";
 import { GameEvent, GameState } from "./GameState";
+import { RoundFrame } from "./RoundFrame";
 
 export class GameEngine {
     private readonly rules: GameRules;
     private readonly blinker: ColorBlinker;
     private readonly roundFrame: RoundFrame;
+    private readonly cycleExecutor: CycleExecutor;
 
     constructor(private readonly _state: GameState) {
         this.rules = new GameRules(_state);
         this.blinker = new ColorBlinker(_state);
         this.roundFrame = new RoundFrame(_state);
+        this.cycleExecutor = new CycleExecutor(this);
     }
 
     public static create(player: string) {
@@ -23,23 +26,10 @@ export class GameEngine {
     }
 
     update(): void {
-        if (this._state.isGameOver) {
-            return;
-        }
-        if (!this._state.isPlayerTurn) {
-            this.handleBlinkColor();
-            return;
-        }
-        this.roundFrame.update();
-        if (!this.roundFrame.isNextRoundFrame) {
-            return;
-        }
-        this.rules.verifyAllPlayerPressedColors()
-            ? this._state.nextRound()
-            : this._state.gameOver();
+        this.cycleExecutor.execute();
     }
 
-    private handleBlinkColor() {
+    handleBlinkColor() {
         this.blinker.blink();
         const nextColorToBlink = this.blinker.lastBlinkedColor;
         if (nextColorToBlink === null) {
@@ -47,6 +37,16 @@ export class GameEngine {
         } else {
             this._state.changeCurrentColor(nextColorToBlink);
         }
+    }
+
+    execute() {
+        this.roundFrame.update();
+        if (!this.roundFrame.isNextRoundFrame) {
+            return;
+        }
+        this.rules.verifyAllPlayerPressedColors()
+            ? this._state.nextRound()
+            : this._state.gameOver();
     }
 
     on(event: GameEvent, observer: VoidFunction): void {
