@@ -1,14 +1,17 @@
 import { ColorBlinker } from "./ColorBlinker";
+import { RoundFrame } from "./RoundFrame";
 import { GameRules } from "./GameRules";
 import { GameEvent, GameState } from "./GameState";
 
 export class GameEngine {
     private readonly rules: GameRules;
     private readonly blinker: ColorBlinker;
+    private readonly roundFrame: RoundFrame;
 
     constructor(private readonly _state: GameState) {
         this.rules = new GameRules(_state);
         this.blinker = new ColorBlinker(_state);
+        this.roundFrame = new RoundFrame(_state);
     }
 
     public static create(player: string) {
@@ -19,7 +22,7 @@ export class GameEngine {
         this._state.start();
     }
 
-    public update(): void {
+    update(): void {
         if (this._state.isGameOver) {
             return;
         }
@@ -27,19 +30,14 @@ export class GameEngine {
             this.blinkColor();
             return;
         }
-        if (this._ticks < this._state.round.colors.length) {
-            this._ticks++;
+        this.roundFrame.update();
+        if (!this.roundFrame.isNextRoundFrame) {
             return;
-        } else {
-            // reset ticks
-            this._ticks = 0;
         }
         this.rules.verifyAllPlayerPressedColors()
             ? this._state.nextRound()
             : this._state.gameOver();
     }
-
-    private _ticks = 0;
 
     private blinkColor() {
         const nextColorToBlink = this.blinker.getNextColorToBlink();
