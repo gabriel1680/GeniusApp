@@ -1,36 +1,62 @@
-import { Clock } from "../src";
+import { Clock, ClockEvents } from "../src";
+import { Scheduler } from "../src/time/Scheduler";
 
 describe("Clock (unit)", () => {
-    class TestableClock extends Clock {
-        protected sleep(ms: number): Promise<void> {
-            return new Promise((r) => r());
-        }
-    }
+    let clock: Clock;
+    let tickInterval: number;
+    let scheduler: jest.Mocked<Scheduler>;
+
+    beforeEach(() => {
+        scheduler = {
+            schedule: jest.fn(),
+            cancel: jest.fn(),
+        };
+        tickInterval = 1000;
+        clock = new Clock(scheduler, tickInterval);
+    });
 
     it("should be able create a clock", () => {
-        const clock = new Clock();
-        expect(clock.isPaused).toBeFalsy();
+        expect(clock.isRunning).toBeFalsy();
     });
 
-    it("should be able to tick", async () => {
-        const clock = new TestableClock();
-        const gen = clock.tick();
-        await gen.next();
+    it("should be able to start a clock", () => {
+        clock.start();
+        expect(clock.isRunning).toBeTruthy();
+        expect(scheduler.schedule).toHaveBeenCalled();
     });
 
-    it("should not be able to tick when pause", async () => {
-        const clock = new TestableClock();
-        for await (const _ of clock.tick()) {
-            clock.togglePause();
-        }
-        expect(clock.isPaused).toBeTruthy();
+    it("start a running clock should make nothing", async () => {
+        clock.start();
+        clock.start();
+        expect(clock.isRunning).toBeTruthy();
+        expect(scheduler.schedule).toHaveBeenCalledTimes(1);
     });
 
-    it("should be able to toggle pause", async () => {
-        const clock = new Clock(1000, true);
-        expect(clock.isPaused).toBeTruthy();
+    it("stop a clock not started should make nothing", async () => {
+        clock.stop();
+        expect(clock.isRunning).toBeFalsy();
+        expect(scheduler.schedule).not.toHaveBeenCalled();
+        expect(scheduler.cancel).not.toHaveBeenCalled();
+    });
 
-        clock.togglePause();
-        expect(clock.isPaused).toBeFalsy();
+    it("should be able to pause", async () => {
+        clock.start();
+        clock.stop();
+        expect(clock.isRunning).toBeFalsy();
+        expect(scheduler.cancel).toHaveBeenCalled();
+    });
+
+    it("should be able to react on each tick", async () => {
+        const fakeScheduler: Scheduler = {
+            schedule: function (fn: () => void, delay: number): void {
+                fn();
+            },
+            cancel: function (): void {},
+        };
+        const tickSpy = jest.fn();
+        const clock = new Clock(fakeScheduler);
+        clock.on(ClockEvents.TICK, tickSpy);
+        clock.start();
+        expect(tickSpy).toHaveBeenCalledTimes(1);
     });
 });

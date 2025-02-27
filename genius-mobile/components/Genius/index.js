@@ -5,18 +5,23 @@ import Score from '../Score';
 import Title from '../Title';
 import styles from './styles';
 
-import { Clock, GameEngine, GameEvent } from '@genius/engine';
+import {
+    Clock,
+    GameEngine,
+    GameEvent,
+    NodeJSScheduler
+} from '@genius/engine';
 
+import EnvironmentManager from '@/services/EnvironmentManager';
+import SoundPlayer from '@/services/sound/SoundPlayer';
+import { GameOver } from './GameOver';
 import GeniusButtons from './GeniusButtons';
 import { PauseButton } from './PauseButton';
 import { TimeoutBar } from './TimeoutBar';
-import { GameOver } from './GameOver';
-import SoundPlayer from '@/services/sound/SoundPlayer';
-import EnvironmentManager from '@/services/EnvironmentManager';
 
 // TODO: extract this to app state or provider
 const game = GameEngine.create('New Player');
-const clock = new Clock();
+const clock = new Clock(new NodeJSScheduler());
 game.start();
 
 const soundPlayer = new SoundPlayer();
@@ -27,20 +32,21 @@ export default function Genius() {
     const [_, setTick] = useState(0);
     const [isPaused, setIsPaused] = useState(clock.isPaused);
 
-    async function mainLoop() {
-        for await (const _ of clock.tick()) {
+    useEffect(() => {
+        clock.on('tick', () => {
             game.update();
             setTick(prev => (prev += 1));
-        }
-    }
-
-    useEffect(() => {
-        mainLoop();
-    }, [isPaused]);
+        });
+        clock.start();
+    }, []);
 
     function onPauseOrResume() {
-        clock.togglePause();
-        setIsPaused(clock.isPaused);
+        if (clock.isRunning) {
+            clock.stop();
+        } else {
+            clock.start();
+        }
+        setIsPaused(!clock.isRunning);
     }
 
     function getTitle() {
@@ -55,7 +61,7 @@ export default function Genius() {
     return (
         <View style={styles.container}>
             {/* TODO: add black overlay when game paused to prevent click buttons */}
-            <PauseButton isPaused={clock.isPaused} onPress={onPauseOrResume} />
+            <PauseButton isPaused={isPaused} onPress={onPauseOrResume} />
             <Title text={getTitle()} />
             <GeniusButtons
                 disabled={!game.state.isPlayerTurn}
