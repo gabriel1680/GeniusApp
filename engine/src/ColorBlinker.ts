@@ -1,25 +1,29 @@
 import { GameState } from "./GameState";
 
 export class ColorBlinker {
-    private lastBlinkedIdx = -1;
-    private lastBlinkedColor: string | null = null;
+    private _lastBlinkedIdx = -1;
+    private _lastBlinkedColor: string | null = null;
 
     constructor(private readonly _state: GameState) {}
 
-    getNextColorToBlink(): string | undefined {
+    blink(): void {
         if (this.isLastBlinkBeforePlayerTurn()) {
             // reset idx
-            this.lastBlinkedIdx = -1;
-            return undefined;
+            this._lastBlinkedIdx = -1;
+            this._lastBlinkedColor = null;
+            return;
         }
-        this.lastBlinkedColor = this.getLastBlinkedColor();
-        return this.lastBlinkedColor;
+        this._lastBlinkedColor = this.getLastBlinkedColor();
+    }
+
+    get lastBlinkedColor() {
+        return this._lastBlinkedColor;
     }
 
     private isLastBlinkBeforePlayerTurn() {
         return (
-            this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
-            this.lastBlinkedColor === ""
+            this._lastBlinkedIdx === this._state.round.colors.length - 1 &&
+            this._lastBlinkedColor === ""
         );
     }
 
@@ -27,10 +31,10 @@ export class ColorBlinker {
         if (!this.isLastBlinkedColorEmpty()) {
             return "";
         }
-        return this._state.round.colors[++this.lastBlinkedIdx];
+        return this._state.round.colors[++this._lastBlinkedIdx];
     }
 
     private isLastBlinkedColorEmpty() {
-        return this.lastBlinkedColor === "" || this.lastBlinkedColor === null;
+        return this._lastBlinkedColor === "" || this._lastBlinkedColor === null;
     }
 }

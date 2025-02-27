@@ -27,7 +27,7 @@ export class GameEngine {
             return;
         }
         if (!this._state.isPlayerTurn) {
-            this.blinkColor();
+            this.handleBlinkColor();
             return;
         }
         this.roundFrame.update();
@@ -39,9 +39,10 @@ export class GameEngine {
             : this._state.gameOver();
     }
 
-    private blinkColor() {
-        const nextColorToBlink = this.blinker.getNextColorToBlink();
-        if (nextColorToBlink === undefined) {
+    private handleBlinkColor() {
+        this.blinker.blink();
+        const nextColorToBlink = this.blinker.lastBlinkedColor;
+        if (nextColorToBlink === null) {
             this._state.setPlayerTurn();
         } else {
             this._state.changeCurrentColor(nextColorToBlink);
