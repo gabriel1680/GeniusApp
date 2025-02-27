@@ -1,35 +1,21 @@
 import React, { useState } from 'react';
-import {
-    Text,
-    SafeAreaView,
-    StatusBar,
-    TouchableOpacity,
-    View,
-    StyleSheet,
-} from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native';
 
 import Genius from './Genius';
-import AppHeader from './AppHeader';
+import Start from './Start';
 
 export default function App() {
     const [isStart, setStart] = useState(false);
+
+    function onStart() {
+        return setStart(true);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle={'dark-content'} />
             <View style={styles.container}>
-                {isStart ? (
-                    <Genius />
-                ) : (
-                    <>
-                        <AppHeader />
-                        <TouchableOpacity
-                            onPress={() => setStart(true)}
-                            style={styles.startButton}>
-                            <Text style={styles.startButtonText}>Começar!</Text>
-                        </TouchableOpacity>
-                    </>
-                )}
+                {isStart ? <Genius /> : <Start onStart={onStart} />}
             </View>
         </SafeAreaView>
     );
@@ -41,20 +27,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-    },
-    startButton: {
-        width: 150,
-        height: 65,
-        padding: 20,
-        zIndex: 8,
-        backgroundColor: '#2c3e50',
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    startButtonText: {
-        color: '#FFF',
-        fontSize: 20,
-        fontWeight: 'bold',
     },
 });
