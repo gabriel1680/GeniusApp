@@ -1,7 +1,12 @@
+import { GameRules } from "./GameRules";
 import { GameEvent, GameState } from "./GameState";
 
 export class GameEngine {
-    constructor(private readonly _state: GameState) {}
+    private readonly rules: GameRules;
+
+    constructor(private readonly _state: GameState) {
+        this.rules = new GameRules(_state);
+    }
 
     public static create(player: string) {
         return new GameEngine(GameState.new(player));
@@ -25,7 +30,7 @@ export class GameEngine {
         }
         // reset ticks
         this._ticks = 0;
-        this.verifyAllPlayerPressedColors()
+        this.rules.verifyAllPlayerPressedColors()
             ? this._state.nextRound()
             : this._state.gameOver();
     }
@@ -65,34 +70,13 @@ export class GameEngine {
         return this.lastBlinkedColor === "" || this.lastBlinkedColor === null;
     }
 
-    private verifyAllPlayerPressedColors(): boolean {
-        return this.haveWrongAnswer(this._state.round.colors.length);
-    }
-
-    private verifyPlayerPressedColors(): boolean {
-        return this.haveWrongAnswer(this._state.player.selectedColors.length);
-    }
-
-    private haveWrongAnswer(n: number): boolean {
-        for (let i = 0; i < n; i++) {
-            if (this.isWrongColor(i)) return false;
-        }
-        return true;
-    }
-
-    private isWrongColor(i: number) {
-        return (
-            this._state.player.selectedColors[i] !== this._state.round.colors[i]
-        );
-    }
-
     on(event: GameEvent, observer: VoidFunction): void {
         this._state.on(event, observer);
     }
 
     playerPressColor(color: string): void {
         this._state.player.selectColor(color);
-        if (!this.verifyPlayerPressedColors()) {
+        if (!this.rules.verifyPlayerPressedColors()) {
             this._state.gameOver();
         }
     }
