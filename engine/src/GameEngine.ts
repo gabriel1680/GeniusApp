@@ -1,11 +1,14 @@
+import { ColorBlinker } from "./ColorBlinker";
 import { GameRules } from "./GameRules";
 import { GameEvent, GameState } from "./GameState";
 
 export class GameEngine {
     private readonly rules: GameRules;
+    private readonly blinker: ColorBlinker;
 
     constructor(private readonly _state: GameState) {
         this.rules = new GameRules(_state);
+        this.blinker = new ColorBlinker(_state);
     }
 
     public static create(player: string) {
@@ -21,53 +24,30 @@ export class GameEngine {
             return;
         }
         if (!this._state.isPlayerTurn) {
-            this.blinkColors();
+            this.blinkColor();
             return;
         }
         if (this._ticks < this._state.round.colors.length) {
             this._ticks++;
             return;
+        } else {
+            // reset ticks
+            this._ticks = 0;
         }
-        // reset ticks
-        this._ticks = 0;
         this.rules.verifyAllPlayerPressedColors()
             ? this._state.nextRound()
             : this._state.gameOver();
     }
 
-    private lastBlinkedIdx = -1;
-    private lastBlinkedColor: string | null = null;
-
-    private blinkColors(): void {
-        if (this.isLastBlinkBeforePlayerTurn()) {
-            // reset idx
-            this.lastBlinkedIdx = -1;
-            this._state.setPlayerTurn();
-            return;
-        }
-        this.lastBlinkedColor = this.getLastBlinkedColor();
-        this._state.changeCurrentColor(this.lastBlinkedColor);
-    }
-
     private _ticks = 0;
 
-    private isLastBlinkBeforePlayerTurn() {
-        return (
-            this.lastBlinkedIdx === this._state.round.colors.length - 1 &&
-            this.lastBlinkedColor === ""
-        );
-    }
-
-    private getLastBlinkedColor() {
-        if (this.isLastBlinkedColorEmpty()) {
-            return this._state.round.colors[++this.lastBlinkedIdx];
+    private blinkColor() {
+        const nextColorToBlink = this.blinker.getNextColorToBlink();
+        if (nextColorToBlink === undefined) {
+            this._state.setPlayerTurn();
         } else {
-            return "";
+            this._state.changeCurrentColor(nextColorToBlink);
         }
-    }
-
-    private isLastBlinkedColorEmpty() {
-        return this.lastBlinkedColor === "" || this.lastBlinkedColor === null;
     }
 
     on(event: GameEvent, observer: VoidFunction): void {
